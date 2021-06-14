@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-<!-- Mirrored from themesbrand.com/skote/layouts/ecommerce-Hàng đợi.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 15 Dec 2020 17:47:23 GMT -->
 
 <head>
     <meta charset="utf-8" />
@@ -16,6 +15,7 @@
     <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="/statics/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body data-sidebar="dark">
@@ -150,69 +150,35 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4">
-                                            <!-- <div class="search-box mr-2 mb-2 d-inline-block">
-                                                <div class="position-relative">
-                                                    <input type="text" class="form-control" placeholder="Search...">
-                                                    <i class="bx bx-search-alt search-icon"></i>
-                                                </div>
-                                            </div> -->
+                                <form class="card-body" action="/queue_add" method="POST">
+                                    <h4 class="card-title">Nhập đường dẫn và nguồn trích</h4>
+                                    <p class="card-title-desc">Hàng đợi sẽ được <code>tự động crawl</code> vào lúc <code>23:00</code> <code>hằng ngày</code>.</p>
+                                    <div class="form-group row">
+                                        <label for="example-url-input" class="col-md-2 col-form-label">URL</label>
+                                        <div class="col-md-10">
+                                            <input name="url" class="form-control" type="url" value="" id="example-url-input">
                                         </div>
-                                        <div class="col-sm-8">
-                                            <div class="text-sm-right">
-                                                <a href="/add" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Thêm URL </a>
-                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label">Nguồn</label>
+                                        <div class="col-md-10">
+                                            <select name="source" class="form-control">
+                                                <option selected>Trang web 1</option>
+                                                <option>Trang web 2</option>
+                                            </select>
                                         </div>
-                                        <!-- end col-->
                                     </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-centered table-nowrap">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>URL</th>
-                                                    <th>Ngày cập nhật</th>
-                                                    <th>Source</th>
-                                                    <th>Thao tác</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{range $novel := .Novels}}
-                                                <tr>
-                                                    <td><a href="javascript: void(0);" class="text-body font-weight-bold">#{{$novel.ID}}</a> </td>
-                                                    <td>
-                                                        {{$novel.Url}}
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge badge-pill badge-soft-success font-size-12">{{$novel.Date}}</span>
-                                                    </td>
-                                                    <td>
-                                                        {{$novel.Source}}
-                                                    </td>
-                                                    <td>
-                                                        <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="/queue/delete/{{$novel.ID}}" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-close font-size-18"></i></a>
-                                                    </td>
-                                                </tr>
-                                                {{end}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <ul class="pagination pagination-rounded justify-content-end mb-2">
 
-                                        <li class="page-item active"><a class="page-link" href="/queue/page/{{.Page}}">{{ .Page}}</a></li>
-                                        {{range $pagee := .Pages}}
-                                        <li class="page-item"><a class="page-link" href="/queue/page/{{ $pagee}}">{{ $pagee}}</a></li>
-                                        {{end}}
-                                        <!-- <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li> -->
-                                    </ul>
-                                </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="add_queue" type="button" class="form-control">Thêm vào hàng đợi</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
+                        <!-- end col -->
                     </div>
-                    <!-- end row -->
                 </div>
                 <!-- container-fluid -->
             </div>
@@ -243,6 +209,7 @@
     <script src="/statics/assets/libs/node-waves/waves.min.js"></script>
     <!-- App js -->
     <script src="/statics/assets/js/app.js"></script>
+    <script src="/statics/assets/js/main.js"></script>
 </body>
 
 </html>

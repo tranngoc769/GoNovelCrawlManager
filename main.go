@@ -101,7 +101,44 @@ func Queue(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("templates/queue.html"))
 	tmpl.Execute(w, data)
 }
-
+func AddQueue(w http.ResponseWriter, r *http.Request) {
+	data := map[string]interface{}{}
+	tmpl := template.Must(template.ParseFiles("templates/addqueue.html"))
+	tmpl.Execute(w, data)
+}
+func AddQueuePost(w http.ResponseWriter, r *http.Request) {
+	url := r.FormValue("url")
+	source := r.FormValue("source")
+	now := time.Now()
+	dt := now.Format("2006-01-02 15:04:05")
+	novel := model.NovelQueue{
+		Url:      url,
+		Source:   source,
+		Date:     dt,
+		IsDelete: 0,
+	}
+	data := map[string]interface{}{}
+	data["backlink"] = "/add"
+	data["Msg"] = "Thêm URL không thành công"
+	if url == "" || source == "" {
+		tmpl := template.Must(template.ParseFiles("templates/erro.html"))
+		tmpl.Execute(w, data)
+		return
+	}
+	code, _ := service.NovelQueue_Service.CreateNovel(novel)
+	if code != 200 {
+		tmpl := template.Must(template.ParseFiles("templates/erro.html"))
+		tmpl.Execute(w, data)
+		return
+	}
+	http.Redirect(w, r, "/add", http.StatusSeeOther)
+}
+func Test(w http.ResponseWriter, r *http.Request) {
+	data := map[string]interface{}{}
+	data["backlink"] = "/add"
+	tmpl := template.Must(template.ParseFiles("templates/erro.html"))
+	tmpl.Execute(w, data)
+}
 func DeleteQueue(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id_arg := vars["id"]
@@ -241,6 +278,13 @@ func main() {
 	// Delete novel
 	router.HandleFunc("/novel/delete/{id}", DeleteNovel)
 	router.HandleFunc("/novel/delete/", DeleteNovel)
+	// Add
+
+	router.HandleFunc("/add/", AddQueue)
+	router.HandleFunc("/queue_add", AddQueuePost).Methods("POST")
+	// Test
+
+	router.HandleFunc("/test", Test)
 	//
 	if port == "" {
 		port = "3001"

@@ -131,88 +131,24 @@
         <!-- ============================================================== -->
         <div class="main-content">
             <div class="page-content">
-                <div class="container-fluid">
-                    <!-- start page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0 font-size-18">Hàng đợi</h4>
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Trang chủ</a></li>
-                                        <li class="breadcrumb-item active">Hàng đợi</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
+                <div class="container">
+                    <div class="card radius-15 shadow-none bg-transparent">
+                        <div class="row no-gutters">
+                            <div class="col-lg-6">
                                 <div class="card-body">
-                                    <div class="row mb-2">
-                                        <div class="col-sm-4">
-                                            <!-- <div class="search-box mr-2 mb-2 d-inline-block">
-                                                <div class="position-relative">
-                                                    <input type="text" class="form-control" placeholder="Search...">
-                                                    <i class="bx bx-search-alt search-icon"></i>
-                                                </div>
-                                            </div> -->
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <div class="text-sm-right">
-                                                <a href="/add" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Thêm URL </a>
-                                            </div>
-                                        </div>
-                                        <!-- end col-->
+                                    <h1 class="display-1"><span class="text-primary">4</span><span class="text-danger">0</span><span class="text-success">4</span></h1>
+                                    <h2 class="font-weight-bold display-4">{{.Msg}}</h2>
+                                    <div class="mt-5"> <a href="/" class="btn btn-lg btn-primary px-md-5 radius-30">Go Home</a>
+                                        <a href="{{.backlink}}" class="btn btn-lg btn-outline-dark ml-3 px-md-5 radius-30">Back</a>
                                     </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-centered table-nowrap">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>URL</th>
-                                                    <th>Ngày cập nhật</th>
-                                                    <th>Source</th>
-                                                    <th>Thao tác</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{range $novel := .Novels}}
-                                                <tr>
-                                                    <td><a href="javascript: void(0);" class="text-body font-weight-bold">#{{$novel.ID}}</a> </td>
-                                                    <td>
-                                                        {{$novel.Url}}
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge badge-pill badge-soft-success font-size-12">{{$novel.Date}}</span>
-                                                    </td>
-                                                    <td>
-                                                        {{$novel.Source}}
-                                                    </td>
-                                                    <td>
-                                                        <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="/queue/delete/{{$novel.ID}}" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-close font-size-18"></i></a>
-                                                    </td>
-                                                </tr>
-                                                {{end}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <ul class="pagination pagination-rounded justify-content-end mb-2">
-
-                                        <li class="page-item active"><a class="page-link" href="/queue/page/{{.Page}}">{{ .Page}}</a></li>
-                                        {{range $pagee := .Pages}}
-                                        <li class="page-item"><a class="page-link" href="/queue/page/{{ $pagee}}">{{ $pagee}}</a></li>
-                                        {{end}}
-                                        <!-- <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li> -->
-                                    </ul>
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <img src="/statics/assets/images/404-error.png" class="card-img" alt="">
+                            </div>
                         </div>
+                        <!--end row-->
                     </div>
-                    <!-- end row -->
                 </div>
                 <!-- container-fluid -->
             </div>
