@@ -1,0 +1,22 @@
+{
+    "main": {
+        "port": "8000",
+        "log_type": "GELF",
+        "log_level": "debug",
+        "log_file": "tmp/console.log",
+        "db": "enabled"
+    },
+    "db": {
+        "driver": "mysql",
+        "host": "localhost",
+        "port": "3306",
+        "username": "root",
+        "password": "",
+        "name": "novelcrawler",
+        "ssl_mode": "disable",
+        "timeout": 15,
+        "max_open_conns": 10,
+        "max_idle_conns": 3,
+        "conn_max_lifetime": 600
+    }
+}
