@@ -4,6 +4,7 @@ type Novel struct {
 	ID       uint   `gorm:"column:id;primarykey" json:"id"`
 	Content  string `gorm:"column:content;type:longtext;not null" json:"content"`
 	Url      string `gorm:"column:url;type:varchar(255);unique" json:"url"`
+	Name     string `gorm:"column:caption;type:varchar(255);unique" json:"caption"`
 	Date     string `gorm:"column:date;type:longtext;" json:"date"`
 	IsDelete int    `gorm:"column:is_delete;type:bit" json:"is_delete"`
 }

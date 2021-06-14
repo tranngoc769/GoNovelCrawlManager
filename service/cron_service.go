@@ -114,7 +114,17 @@ func onePage(pathURL string) ([]string, error) {
 }
 
 func (service *CronService) RunCron() (int, interface{}) {
-	log.Info("dsa", "đấ", "sdasd")
+	// insertData := model.NovelQueue{
+	// 	Url:      "https://",
+	// 	Source:   "wika",
+	// 	Date:     "2021-06-14 12:12:00",
+	// 	IsDelete: 0,
+	// }
+	resp, err := NovelQueue_Service.GetAllUrlInQueue()
+	if err != nil {
+		log.Info("RUN CRON ", "RESP : ", resp)
+		// for
+	}
 	// const url = "https://www.wuxiaworld.com/novel/emperors-domination/emperor-chapter-6"
 	// onePage(url)
 	return 0, nil

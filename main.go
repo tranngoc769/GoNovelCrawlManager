@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"text/template"
 	"time"
 
+	"gonovelcrawlmanager/common/model"
 	imysql "gonovelcrawlmanager/internal/sqldb/mysql"
 	mysql "gonovelcrawlmanager/internal/sqldb/mysql/driver"
 	"gonovelcrawlmanager/service"
@@ -22,8 +24,13 @@ import (
 
 var CronService interface{}
 
-var NovelService interface{}
-var NovelQueueService interface{}
+func makeRange(min, max int) []int {
+	a := make([]int, max-min+1)
+	for i := range a {
+		a[i] = min + i
+	}
+	return a
+}
 
 type MySqlConfig struct {
 	Host         string
@@ -36,20 +43,82 @@ type MySqlConfig struct {
 	MaxOpenConns int
 	MaxIdleConns int
 }
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("templates/main.html"))
-	vars := mux.Vars(r)
-	username := vars["username"]
-	if username == "" {
-		username = "tnquang769"
-	}
-	log.Info("Index View ", "User : ", username)
-	is := map[string]interface{}{}
-	is["ok"] = "ok"
-	tmpl.Execute(w, is)
+type DataNove struct {
+	Novels []model.Novel
+	Page   int
+	Pages  []int
 }
 
+type DataNoveQueue struct {
+	Novels []model.NovelQueue
+	Page   int
+	Pages  []int
+}
+
+func Novel(w http.ResponseWriter, r *http.Request) {
+	limit := 4
+	vars := mux.Vars(r)
+	page := 1
+	page_arg := vars["page"]
+	if page_arg != "" {
+		page, _ = strconv.Atoi(page_arg)
+	}
+	total_page, _ := service.Novel_Service.CountNovels("")
+
+	log.Error("Main", "Total novels: ", total_page)
+	novels, err := service.Novel_Service.GetNovelPaging(page, limit)
+	if err != nil {
+		log.Error("Main", "Get novels: ", err, total_page)
+	}
+	data := DataNove{
+		Novels: novels,
+		Page:   page,
+		Pages:  makeRange(1, total_page/limit+1),
+	}
+	tmpl := template.Must(template.ParseFiles("templates/novel.html"))
+	tmpl.Execute(w, data)
+}
+
+func Queue(w http.ResponseWriter, r *http.Request) {
+	limit := 4
+	vars := mux.Vars(r)
+	page := 1
+	page_arg := vars["page"]
+	if page_arg != "" {
+		page, _ = strconv.Atoi(page_arg)
+	}
+	total_page, _ := service.NovelQueue_Service.CountNovels("")
+	log.Error("Main", "Total novels: ", total_page)
+	novels, err := service.NovelQueue_Service.GetNovelPaging(page, limit)
+	if err != nil {
+		log.Error("Main", "Get novels: ", err, total_page)
+	}
+	data := DataNoveQueue{
+		Novels: novels,
+		Page:   page,
+		Pages:  makeRange(1, total_page/limit+1),
+	}
+	tmpl := template.Must(template.ParseFiles("templates/queue.html"))
+	tmpl.Execute(w, data)
+}
+
+func DeleteQueue(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id_arg := vars["id"]
+	if id_arg != "" {
+		service.NovelQueue_Service.DeleteNovel(id_arg)
+	}
+	http.Redirect(w, r, "/queue", http.StatusSeeOther)
+}
+
+func DeleteNovel(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id_arg := vars["id"]
+	if id_arg != "" {
+		service.Novel_Service.DeleteNovel(id_arg)
+	}
+	http.Redirect(w, r, "/novel", http.StatusSeeOther)
+}
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	static_dir := "/statics/"
@@ -145,23 +214,34 @@ func main() {
 	imysql.MySqlGoAutodialConnector = db2
 	imysql.MySqlGoAutodialConnector.Ping()
 	CronService := service.NewCronService()
-	NovelService := service.NewNovelService()
-	NovelQueueService := service.NewNovelQueueService()
-	_ = NovelService
-	_ = NovelQueueService
+	service.Novel_Service = service.NewNovelService()
+	service.NovelQueue_Service = service.NewNovelQueueService()
 
 	// Cron
 	crawlCron := CronService.RunCron
 	s2 := gocron.NewScheduler(time.UTC)
-	s2.Every(500).Seconds().Do(crawlCron)
+	s2.Every(5000).Seconds().Do(crawlCron)
 	s2.StartAsync()
 	defer s2.Clear()
 	// End define
 	r := NewRouter()
 	router := r.PathPrefix("/").Subrouter()
-	router.HandleFunc("/{username}", Index)
-	router.HandleFunc("/", Index)
+	//
+	router.HandleFunc("/", Novel)
+	// Novel
+	router.HandleFunc("/novel/page/{page}", Novel)
+	router.HandleFunc("/novel", Novel)
+	// Queue
+	router.HandleFunc("/queue/page/{page}", Queue)
+	router.HandleFunc("/queue", Queue)
 	port := os.Getenv("PORT")
+	// Delete queue
+	router.HandleFunc("/queue/delete/{id}", DeleteQueue)
+	router.HandleFunc("/queue/delete/", DeleteQueue)
+	// Delete novel
+	router.HandleFunc("/novel/delete/{id}", DeleteNovel)
+	router.HandleFunc("/novel/delete/", DeleteNovel)
+	//
 	if port == "" {
 		port = "3001"
 	}

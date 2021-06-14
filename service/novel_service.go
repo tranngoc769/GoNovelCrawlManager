@@ -40,3 +40,11 @@ func (service *NovelService) DeleteNovel(id string) (int, interface{}) {
 	}
 	return response.NewOKResponse(resp)
 }
+
+func (service *NovelService) GetNovelPaging(page int, limit int) ([]model.Novel, error) {
+	return repository.NovelRepo.GetNovelPaging(page, limit)
+}
+
+func (service *NovelService) CountNovels(search string) (int, error) {
+	return repository.NovelRepo.CountNovels(search)
+}

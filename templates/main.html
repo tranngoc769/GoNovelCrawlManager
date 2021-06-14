@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+
+<!-- Mirrored from demo.foxthemes.net/instellohtml/explore.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 03 Apr 2021 07:43:32 GMT -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="/statics/assets/images/favicon.png" rel="icon" type="image/png">
+
+    <!-- Basic Page Needs
+        ================================================== -->
+    <title>Trần Ngọc</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="Profile Detail - Download Insta Image Full HD">
+    <meta name="keywords" content="Instagram, Downloader, FullHD">
+    <meta name="author" content="Ngọc Quang">
+    <!-- Meta FB -->
+    <meta property="og:title" content="Instagram Profile Viewer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://instagram.vnspeechrecognition.com" />
+    <meta property="og:image" content="assets/images/og.png" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="300" />
+    <!-- icons
+        ================================================== -->
+    <link rel="stylesheet" href="/statics/assets/css/icons.css">
+
+    <!-- CSS 
+        ================================================== -->
+    <link rel="stylesheet" href="/statics/assets/css/uikit.css">
+    <link rel="stylesheet" href="/statics/assets/css/style.css">
+    <link rel="stylesheet" href="/statics/assets/css/tailwind.css">
+
+    <style>
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 950px !important;
+                padding-top: 30px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="wrapper">
+
+        <div class="sidebar">
+            <div class="sidebar_header border-b border-gray-200 from-gray-100 to-gray-50 bg-gradient-to-t  uk-visible@s">
+                <a href="#">
+                    <img src="/statics/assets/images/logo.png">
+                    <img src="/statics/assets/images/logo-light.png" class="logo_inverse">
+                </a>
+                <!-- btn night mode -->
+                <a href="#" id="night-mode" class="btn-night-mode" data-tippy-placement="left" title="Switch to dark mode"></a>
+            </div>
+            <div class="border-b border-gray-20 flex justify-between items-center p-3 pl-5 relative uk-hidden@s">
+                <h3 class="text-xl"> Navigation </h3>
+                <span class="btn-mobile" uk-toggle="target: #wrapper ; cls: sidebar-active"></span>
+            </div>
+            <div class="sidebar_inner" data-simplebar>
+                <div class="flex flex-col items-center my-6 uk-visible@s">
+                    <div class="bg-gradient-to-tr from-yellow-600 to-pink-600 p-1 rounded-full transition m-0.5 mr-2  w-24 h-24">
+                        <img src="{{.Graphql.User.ProfilePicURLHd}}" class="bg-gray-200 border-4 border-white rounded-full w-full h-full">
+                    </div>
+                    <a href="#" class="text-xl font-medium capitalize mt-4 uk-link-reset"> {{.Graphql.User.FullName}}
+                    </a>
+                    <p class="lg:text-left mb-2 text-center  dark:text-gray-100">{{.Graphql.User.Biography}} </p>
+                    <a href="{{.Graphql.User.ExternalURL}}" class="uk-link-reset">Facebook</a>
+                    <div class="flex justify-around w-full items-center text-center uk-link-reset text-gray-800 mt-6">
+                        <div>
+                            <a href="#">
+                                <strong>Post</strong>
+                                <div> {{.Graphql.User.EdgeOwnerToTimelineMedia.Count}}</div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#">
+                                <strong>Following</strong>
+                                <div> {{.Graphql.User.EdgeFollow.Count}}</div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#">
+                                <strong>Followers</strong>
+                                <div> {{.Graphql.User.EdgeFollowedBy.Count}}</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="-mx-4 -mt-1 uk-visible@s">
+                <ul>
+                    <li hidden>
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span> My Profile </span> </a>
+                    </li>
+                    <li hidden>
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            <span> Logout </span> </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main_content">
+
+            <header>
+                <div class="header_inner">
+                    <div class="left-side">
+                        <!-- Logo -->
+                        <div id="logo" class=" uk-hidden@s">
+                            <a href="/">
+                                <img src="/statics/assets/images/logo-mobile.png" alt="">
+                                <img src="/statics/assets/images/logo-mobile-light.png" class="logo_inverse">
+                            </a>
+                        </div>
+
+                        <div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
+                            <i class="uil-bars"></i>
+                        </div>
+
+                        <div class="header_search">
+                            <input id='username' type="text" placeholder="Username">
+                            <div class="icon-search">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="right-side lg:pr-4">
+                        <!-- upload -->
+                        <button id='search_username' class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                            <ion-icon name="add-circle" class="-mb-1
+                             mr-1 opacity-90 text-xl uilus-circle"></ion-icon> Find User
+                        </button>
+                        <!-- Notification -->
+                        <a href="#" class="header-links-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                        </a>
+                        <div uk-drop="mode: click;offset: 4" class="header_dropdown">
+                            <h4 class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
+                                Notification </h4>
+                            <ul class="dropdown_scrollbar" data-simplebar>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-1.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <p> <strong>Adrian Mohani</strong> Lorem ipsum dolor cursus
+                                                <span class="text-link"> Adipiscing massa convallis  </span>
+                                            </p>
+                                            <span class="time-ago"> 2 hours ago </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-2.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <p>
+                                                <strong>Stella Johnson</strong> Nonummy nibh euismod
+                                                <span class="text-link"> Imperdiet doming </span>
+                                            </p>
+                                            <span class="time-ago"> 9 hours ago </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-3.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <p>
+                                                <strong>Alex Dolgove</strong> Lorem ipsum dolor cursus
+                                                <span class="text-link"> Adipiscing massa convallis  </span>
+                                            </p>
+                                            <span class="time-ago"> 12 hours ago </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-1.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <p>
+                                                <strong>Stella Johnson</strong> Nonummy nibh euismod
+                                                <span class="text-link"> Imperdiet doming </span>
+                                            </p>
+                                            <span class="time-ago"> Yesterday </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-3.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <p>
+                                                <strong>Alex Dolgove</strong> Lorem ipsum dolor cursus
+                                                <span class="text-link"> Adipiscing massa convallis  </span>
+                                            </p>
+                                            <span class="time-ago"> 12 hours ago </span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <a href="#" class="see-all">See all</a>
+                        </div>
+
+                        <!-- Messages -->
+
+                        <a href="#" class="header-links-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                        </a>
+                        <div uk-drop="mode: click;offset: 4" class="header_dropdown">
+                            <h4 class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
+                                Messages </h4>
+                            <ul class="dropdown_scrollbar" data-simplebar>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-1.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> John menathon </strong> <time> 6:43 PM</time>
+                                            <p> Lorem ipsum dolor sit amet, consectetur </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-2.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> Zara Ali </strong> <time>12:43 PM</time>
+                                            <p> Sediam nonummy nibh euismod tincidunt laoreet dolore </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-3.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> Mohamed Ali </strong> <time> Wed </time>
+                                            <p> Lorem ipsum dolor sit amet, consectetur </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-1.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> John menathon </strong> <time> Sun</time>
+                                            <p> Namliber tempor cumsoluta nobis eleifend option adipiscing </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-2.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> Zara Ali </strong> <time> Fri</time>
+                                            <p> Lorem ipsum dolor sit amet, consectetur </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="/statics/assets/images/avatars/avatar-3.jpg" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> Mohamed Ali </strong> <time>1 Week ago</time>
+                                            <p> Sediam nonummy nibh euismod tincidunt laoreet dolore </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <a href="#" class="see-all">See all</a>
+                        </div>
+
+                        <!-- profile -->
+
+                        <a href="#">
+                            <img src="/statics/assets/images/avatars/avatar.jpg" class="header-avatar" alt="">
+                        </a>
+
+                    </div>
+                </div>
+            </header>
+
+            <div class="container m-auto">
+
+                <h1 class="lg:lg:text-2xl text-lg text-lg font-extrabold leading-none text-gray-900 tracking-tight mt-3"> Gallery </h1>
+
+                <div class="lg:m-0 -mx-5 flex justify-between items-center py-2 relative space-x-3 dark-tabs" uk-sticky="cls-active: bg-gray-100 bg-opacity-95; media : @m ; media @m">
+                </div>
+
+                <div class="grid lg:grid-cols-4 grid-cols-2 gap-2 hover:text-yellow-700 uk-link-reset">
+                    <!-- EACH -->
+                    {{range $Parent := .Graphql.User.EdgeOwnerToTimelineMedia.Edges}} {{$caption := ""}} {{if $Parent.Node.EdgeMediaToCaption.Edges}}{{range $Parent.Node.EdgeMediaToCaption.Edges}}{{$caption = .Node.Text}}{{end}}{{end}} {{if $Parent.Node.EdgeSidecarToChildren.Edges}}
+                    {{range $Chidren := $Parent.Node.EdgeSidecarToChildren.Edges}}
+                    <div>
+                        <div class="bg-red-400 max-w-full lg:h-64 h-4 rounded-md relative overflow-hidden uk-transition-toggle shadow-sm">
+                            <input name="pt_content" pid="{{$Chidren.Node.ID}}" value="{{$caption}}" hidden>
+                            <a dt="{{$Parent.Node.TakenAt}}" name="is_modal" pid="{{$Chidren.Node.ID}}" href="#story-modal" uk-toggle>
+                                <img name="is_modal" src="{{.Node.DisplayURL}}" pid="{{$Chidren.Node.ID}}" class="w-full h-full absolute object-cover inset-0">
+                            </a>
+                            <div class="absolut absolute bottom-0 flex items-center justify-between px-4 py-3 space-x-2 text-white w-full custom-overly1">
+                                <div class="flex space-x-3">
+                                    <a dt="{{$Parent.Node.TakenAt}}" name="is_modal" pid="{{$Chidren.Node.ID}}" href="#" class="flex items-center">
+                                        <ion-icon name="heart" class="uil-heart mr-1" role="img" aria-label="heart"></ion-icon> {{$Parent.Node.EdgeLikedBy.Count}} </a>
+                                    <a dt="{{$Parent.Node.TakenAt}}" name="is_modal" pid="{{$Chidren.Node.ID}}" href="#" class="flex items-center">
+                                        <ion-icon name="chatbubble-ellipses" class="uil-comment-alt-search mr-1" role="img" aria-label="chatbubble ellipses"></ion-icon> {{$Parent.Node.EdgeMediaToComment.Count}} </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{end}}{{else}}
+                    <div>
+                        <div class="bg-red-400 max-w-full lg:h-64 h-4 rounded-md relative overflow-hidden uk-transition-toggle shadow-sm">
+                            <input name="pt_content" pid="{{$Parent.Node.ID}}" value="{{$caption}}" hidden>
+                            <a dt="{{$Parent.Node.TakenAt}}" name="is_modal" pid="{{$Parent.Node.ID}}" href="#story-modal" uk-toggle>
+                                <img name="is_modal" src="{{.Node.DisplayURL}}" pid="{{$Parent.Node.ID}}" class="w-full h-full absolute object-cover inset-0">
+                            </a>
+                            <div class="absolut absolute bottom-0 flex items-center justify-between px-4 py-3 space-x-2 text-white w-full custom-overly1">
+                                <div class="flex space-x-3">
+                                    <a dt="{{$Parent.Node.TakenAt}}" name="is_modal" pid="{{$Parent.Node.ID}}" href="#" class="flex items-center">
+                                        <ion-icon name="heart" class="uil-heart mr-1" role="img" aria-label="heart"></ion-icon> {{$Parent.Node.EdgeLikedBy.Count}} </a>
+                                    <a dt="{{$Parent.Node.TakenAt}}" name="is_modal" pid="{{$Parent.Node.ID}}" href="#" class="flex items-center">
+                                        <ion-icon name="chatbubble-ellipses" class="uil-comment-alt-search mr-1" role="img" aria-label="chatbubble ellipses"></ion-icon> {{$Parent.Node.EdgeMediaToComment.Count}} </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{end}}{{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Story modal -->
+    <div id="story-modal" class="uk-modal-container" uk-modal>
+        <div class="uk-modal-dialog story-modal">
+            <button class="uk-modal-close-default lg:-mt-9 lg:-mr-9 -mt-5 -mr-5 shadow-lg bg-white rounded-full p-4 transition dark:bg-gray-600 dark:text-white" type="button" uk-close></button>
+
+            <div class="story-modal-media">
+                <img id="is_img" src="/statics/assets/images/post/img4.jpg" alt="" class="inset-0 h-full w-full object-cover">
+            </div>
+            <div class="flex-1 bg-white dark:bg-gray-900 dark:text-gray-100">
+
+                <!-- post header-->
+                <div class="border-b flex items-center justify-between px-5 py-3 dark:border-gray-600">
+                    <div class="flex flex-1 items-center space-x-4">
+                        <a href="#">
+                            <div class="bg-gradient-to-tr from-yellow-600 to-pink-600 p-0.5 rounded-full">
+                                <img id="is_img2" src="/statics/assets/images/avatars/avatar-2.jpg" class="bg-gray-200 border border-white rounded-full w-8 h-8">
+                            </div>
+                        </a>
+                        <span id="date_is" class="block text-lg font-semibold"> Thông tin chi tiết </span>
+                    </div>
+                    <a href="#">
+                        <i class="icon-feather-more-horizontal text-2xl rounded-full p-2 transition -mr-1"></i>
+                    </a>
+                </div>
+                <div class="story-content p-4" data-simplebar>
+                    <p id="caption_is"> </p>
+                    <div class="py-4 ">
+                        <div class="flex justify-around">
+                            <a href="#" class="flex items-center space-x-3">
+                                <div class="flex font-bold items-baseline"> <i class="uil-heart mr-1"> </i> Visit</div>
+                            </a>
+                            <a id="download_is" href="#" class="flex items-center space-x-3">
+                                <div class="flex font-bold items-baseline"> <i class="uil-heart mr-1"> </i> Download</div>
+                            </a>
+                        </div>
+                        <hr class="-mx-4 my-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' dark';
+            }
+        })(window, document);
+
+
+        (function(window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function(event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('dark');
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+    <!-- Scripts
+    ================================================== -->
+    <script src="/statics/assets/js/tippy.all.min.js"></script>
+    <script src="/statics/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="/statics/assets/js/uikit.js"></script>
+    <script src="/statics/assets/js/simplebar.js"></script>
+    <script src="/statics/assets/js/custom.js"></script>
+    <script src="/statics/assets/js/main.js"></script>
+
+
+    <script src="../../unpkg.com/ionicons%405.2.3/dist/ionicons.js"></script>
+</body>
+
+
+<!-- Mirrored from demo.foxthemes.net/instellohtml/explore.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 03 Apr 2021 07:44:15 GMT -->
+
+</html>

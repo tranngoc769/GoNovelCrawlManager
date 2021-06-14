@@ -38,3 +38,38 @@ func (repo *NovelQueueRepository) DeleteNovel(id string) (interface{}, error) {
 	}
 	return nil, nil
 }
+
+func (repo *NovelQueueRepository) GetAllUrlInQueue() ([]model.NovelQueue, error) {
+	rows := []model.NovelQueue{}
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Where("is_delete", 0).Order("date").Find(&rows)
+	if resp.Error != nil {
+		return []model.NovelQueue{}, resp.Error
+	}
+	return rows, nil
+}
+
+func (repo *NovelQueueRepository) GetNovelPaging(page int, limit int) ([]model.NovelQueue, error) {
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * limit
+	rows := []model.NovelQueue{}
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Select("id,  url, date,  source, is_delete").Where("is_delete", 0).Limit(limit).Offset(offset).Order("date").Find(&rows)
+	if resp.Error != nil {
+		return []model.NovelQueue{}, resp.Error
+	}
+	return rows, nil
+}
+
+func (repo *NovelQueueRepository) CountNovels(search string) (int, error) {
+	rows := map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("crawl_queue").Where("is_delete", 0).Select("Count(id) as count")
+	if search != "" {
+		resp = resp.Where("content like %?%", search)
+	}
+	resp = resp.Take(&rows)
+	if resp.Error != nil {
+		return 0, resp.Error
+	}
+	return int(rows["count"].(int64)), nil
+}

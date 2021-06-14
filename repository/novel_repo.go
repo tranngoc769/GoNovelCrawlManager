@@ -39,3 +39,29 @@ func (repo *NovelRepository) DeleteNovel(id string) (interface{}, error) {
 	}
 	return nil, nil
 }
+
+func (repo *NovelRepository) GetNovelPaging(page int, limit int) ([]model.Novel, error) {
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * limit
+	rows := []model.Novel{}
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.Novel{}).Where("is_delete", 0).Select("id, caption, url, date, SUBSTRING(content, 1,10) as content, is_delete").Limit(limit).Offset(offset).Order("date").Find(&rows)
+	if resp.Error != nil {
+		return []model.Novel{}, resp.Error
+	}
+	return rows, nil
+}
+
+func (repo *NovelRepository) CountNovels(search string) (int, error) {
+	rows := map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("novel").Where("is_delete", 0).Select("Count(id) as count")
+	if search != "" {
+		resp = resp.Where("content like %?%", search)
+	}
+	resp = resp.Take(&rows)
+	if resp.Error != nil {
+		return 0, resp.Error
+	}
+	return int(rows["count"].(int64)), nil
+}
