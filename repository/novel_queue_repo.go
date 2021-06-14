@@ -9,6 +9,8 @@ import (
 type NovelQueueRepository struct {
 }
 
+var NovelQueueRepo NovelQueueRepository
+
 func NewNovelQueueRepository() NovelQueueRepository {
 	repo := NovelQueueRepository{}
 	return repo

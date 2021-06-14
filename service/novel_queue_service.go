@@ -6,18 +6,20 @@ import (
 	"gonovelcrawlmanager/repository"
 )
 
+var NovelQueue_Service NovelQueueService
+
 type NovelQueueService struct {
-	repo repository.NovelRepository
+	repo repository.NovelQueueRepository
 }
 
 func NewNovelQueueService() NovelQueueService {
 	return NovelQueueService{
-		repo: repository.NewNovelRepository(),
+		repo: repository.NewNovelQueueRepository(),
 	}
 }
 
-func (service *NovelQueueService) CreateNovel(entry model.Novel) (int, interface{}) {
-	resp, err := repository.NovelRepo.CreateNovel(entry)
+func (service *NovelQueueService) CreateNovel(entry model.NovelQueue) (int, interface{}) {
+	resp, err := repository.NovelQueueRepo.CreateNovel(entry)
 	if err != nil {
 		return response.NotFound()
 	}

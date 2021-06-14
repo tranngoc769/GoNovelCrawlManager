@@ -6,6 +6,8 @@ import (
 	"gonovelcrawlmanager/repository"
 )
 
+var Novel_Service NovelService
+
 type NovelService struct {
 	repo repository.NovelRepository
 }
