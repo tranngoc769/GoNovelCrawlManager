@@ -12,7 +12,7 @@
         "port": "3306",
         "username": "root",
         "password": "",
-        "name": "novelcrawler",
+        "name": "novel",
         "ssl_mode": "disable",
         "timeout": 15,
         "max_open_conns": 10,

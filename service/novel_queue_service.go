@@ -52,3 +52,7 @@ func (service *NovelQueueService) GetNovelPaging(page int, limit int) ([]model.N
 func (service *NovelQueueService) CountNovels(search string) (int, error) {
 	return repository.NovelQueueRepo.CountNovels(search)
 }
+
+func (service *NovelQueueService) GetAllCategory() ([]map[string]interface{}, error) {
+	return repository.NovelQueueRepo.GetAllCategory()
+}

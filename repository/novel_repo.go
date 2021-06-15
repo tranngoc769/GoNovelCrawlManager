@@ -23,7 +23,7 @@ func (repo *NovelRepository) CreateNovel(entry model.Novel) (interface{}, error)
 		log.Error("Novel Repository ", "CreateNovel", err)
 		return nil, err
 	}
-	return nil, nil
+	return entry, nil
 }
 
 func (repo *NovelRepository) UpdateNovel(id string, data map[string]interface{}) (interface{}, error) {
@@ -50,7 +50,7 @@ func (repo *NovelRepository) GetNovelPaging(page int, limit int) ([]model.Novel,
 	}
 	offset := (page - 1) * limit
 	rows := []model.Novel{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.Novel{}).Where("is_delete", 0).Select("id, caption, url, date, SUBSTRING(content, 1,10) as content, is_delete").Limit(limit).Offset(offset).Order("date").Find(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.Novel{}).Where("is_delete", 0).Select("id,title,description,crawler_href as url").Limit(limit).Offset(offset).Order("date").Find(&rows)
 	if resp.Error != nil {
 		log.Error("Novel Repository ", "GetNovelPaging", resp.Error)
 		return []model.Novel{}, resp.Error
@@ -70,4 +70,39 @@ func (repo *NovelRepository) CountNovels(search string) (int, error) {
 		return 0, resp.Error
 	}
 	return int(rows["count"].(int64)), nil
+}
+
+// Novel
+func (repo *NovelRepository) IsStoryExist(url string) (bool, model.Novel, error) {
+	rows := model.Novel{}
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.Novel{}).Where("crawler_href = ?", url).Limit(1).Take(&rows)
+	if resp.Error != nil {
+		return false, rows, resp.Error
+	}
+	if resp.RowsAffected < 1 {
+		return false, rows, resp.Error
+	}
+	return true, rows, nil
+}
+
+func (repo *NovelRepository) IsExistStoryCategory(storyId string) (bool, error) {
+	rows := []map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("st_story_category").Where("story_id", storyId).Limit(1).Find(&rows)
+	if resp.Error != nil {
+		return false, resp.Error
+	}
+	if len(rows) > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
+func (repo *NovelRepository) CreateStoryCategory(storyId string, category_id string) (bool, error) {
+	resp := IMySql.MySqlConnector.GetConn().Table("st_story_category").Create([]map[string]interface{}{
+		{"story_id": storyId, "category_id": category_id},
+	})
+	if resp.Error != nil {
+		return false, resp.Error
+	}
+	return false, nil
 }
