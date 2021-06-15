@@ -6,6 +6,7 @@ import (
 	"gonovelcrawlmanager/common/model"
 	"gonovelcrawlmanager/repository"
 	"io"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -19,6 +20,28 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 )
+
+var Re *regexp.Regexp
+
+func GetChapterIdFromSlug(slug string) int {
+	listNumber := Re.FindAllString(slug, -1)
+	if len(listNumber) < 1 {
+		return 0
+	}
+	chapter_id := Re.FindAllString(slug, -1)[0]
+	id, _ := strconv.Atoi(chapter_id)
+	return id
+}
+func GetSlugFromURL(url string) string {
+	spliter := strings.Split(url, "/")
+	if len(spliter) > 1 {
+		ok := strings.Replace(spliter[len(spliter)-1], ".html", "", -1)
+		ok = strings.Replace(ok, ".htm", "", -1)
+		ok = strings.Replace(ok, "/", "", -1)
+		return ok
+	}
+	return ""
+}
 
 type CronService struct {
 	repo repository.NovelRepository
@@ -136,19 +159,39 @@ func GetStoryTitle(doc *goquery.Document) (string, string) {
 	})
 	return title, slug.Make(title)
 }
-func CrawlPage(novel model.NovelQueue) {
-	response, err := HttpClient.GetRequestWithRetries(novel.Url)
+
+// Get Chapter Title
+func GetChapterTile(source string, doc *goquery.Document) (string, string) {
+	title := ""
+	switch source {
+	case "wuxiaworld.com":
+		log.Info("Crawl Page", "Source - ", source)
+
+	case "novelfull.com":
+		title = doc.Find("h3").First().Text()
+		if title == "" {
+			title = doc.Find("span[class=chapter-text]").First().Text()
+		}
+	default:
+		_ = "ok"
+	}
+	return title, slug.Make(title)
+}
+func CrawlChapter(source string, url string) (model.Chapter, error) {
+	response, err := HttpClient.GetRequestWithRetries(url)
 	if err != nil {
-		log.Error("Crawl Page", "GetRequestWithRetries - ", err)
+		log.Error("CrawlChapter", "GetRequestWithRetries - ", err)
+		return model.Chapter{}, err
 	}
 	defer response.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
 		log.Error("Crawl Page", "NewDocumentFromReader - ", err)
+		return model.Chapter{}, err
 	}
 	infoList := make([]string, 0)
-	novelData := model.Novel{}
-	switch source := novel.Source; source {
+	chapterData := model.Chapter{}
+	switch source {
 	case "wuxiaworld.com":
 		log.Info("Crawl Page", "Source - ", source)
 		// Get Caption
@@ -161,14 +204,14 @@ func CrawlPage(novel model.NovelQueue) {
 			})
 		})
 		context := strings.Join(infoList, "\n")
-		novelData.Content = context
-		novelData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
-		novelData.Url = novel.Url
-		novelData.Title = name
+		chapterData.Content = context
+		chapterData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
+		chapterData.Title = name
 	case "novelfull.com":
 		log.Info("Crawl Page", "Source - ", source)
 		// Get Caption
-		name, _, _ := GetMetaInfo(doc)
+		_, _, _ = GetMetaInfo(doc)
+		title, _ := GetChapterTile(source, doc)
 		doc.Find("div#chapter-content").Each(func(index int, tableHtml *goquery.Selection) {
 			tableHtml.Find("p").Each(func(indexTr int, pHtml *goquery.Selection) {
 				if pHtml.Text() != "" {
@@ -177,20 +220,22 @@ func CrawlPage(novel model.NovelQueue) {
 			})
 		})
 		context := strings.Join(infoList, "\n")
-		novelData.Content = context
-		novelData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
-		novelData.Url = novel.Url
-		novelData.Title = name
+		chapterData.Content = context
+		chapterData.IsStatus = 1
+		chapterData.AccountId = 8
+		chapterData.IsRobot = 0
+		chapterData.CreatedTime = time.Now().Format("2006-01-02 15:04:05")
+		chapterData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
+		chapterData.Title = title
 	default:
 		log.Error("Crawl Page", "No Source - ", source)
 	}
-	if novelData.Content == "" && novelData.Title == "" {
-		log.Error("Crawl Page", "RunCron - ", novelData.Url+" is empty !!!")
-		return
+	if chapterData.Content == "" && chapterData.Title == "" {
+		log.Error("Crawl Page", "RunCron - ", url+" is empty !!!")
+		return model.Chapter{}, err
 	}
-	Novel_Service.CreateNovel(novelData)
-	id := strconv.Itoa(int(novel.ID))
-	NovelQueue_Service.DeleteNovel(id)
+	return chapterData, nil
+	// Chapter_Service.CreateChapter(chapterData)
 }
 func DownloadFile(fileName string, url string) error {
 	//Get the response bytes from the url
@@ -392,9 +437,49 @@ func GetChapterInPages(url string, source string, page int) []string {
 }
 
 func CrawlByPage(page int, novel model.Novel, source string) {
-
+	if page == 0 {
+		_ = "sdas"
+	}
+	if page == -1 {
+		return
+	}
 	listChapter := GetChapterInPages(novel.Url, source, page)
-	_ = listChapter
+	for i := len(listChapter) - 1; i > 0; i-- {
+		url := listChapter[i]
+		slug := GetSlugFromURL(url)
+		if slug == "" {
+			log.Error("CrawlByPage", "GetSlugFromURL - ", "Slug is empty")
+			return
+		}
+		id := GetChapterIdFromSlug(slug)
+		if id == 0 {
+			log.Error("CrawlByPage", "GetChapterIdFromSlug - ", "Chapterid is empty")
+		}
+		isExist, _, err := Chapter_Service.repo.IsChapterExist(slug, id)
+		if err != nil {
+			log.Error("CrawlByPage", "IsChapterExist - ", err)
+		}
+		if isExist {
+			log.Warn("CrawlByPage", "Chapter is exist! Break", "")
+			return
+		}
+		chapterDate, err := CrawlChapter(source, listChapter[i])
+		if err != nil {
+			log.Error("CrawlByPage", "IsChapterExist - ", err)
+			return
+		}
+		chapterDate.Slug = slug
+		chapterDate.Chapter = uint(id)
+		chapterDate.StoryId = novel.ID
+		chapterDate.StorySlug = novel.Slug
+		_, err = Chapter_Service.repo.CreateChapter(chapterDate)
+		if err != nil {
+			log.Error("CrawlByPage", "CreateChapter - ", err)
+			// return
+		}
+	}
+
+	CrawlByPage((page - 1), novel, source)
 }
 func (service *CronService) RunCron() (int, interface{}) {
 	log.Error("Crawl Page", "RunCron - ", "Running")

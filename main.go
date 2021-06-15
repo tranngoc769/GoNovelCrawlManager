@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"text/template"
 	"time"
@@ -261,11 +262,11 @@ func main() {
 	CronService := service.NewCronService()
 	service.Novel_Service = service.NewNovelService()
 	service.NovelQueue_Service = service.NewNovelQueueService()
-
+	service.Re = regexp.MustCompile("[0-9]+")
 	// Cron
 	crawlCron := CronService.RunCron
 	s2 := gocron.NewScheduler(time.UTC)
-	s2.Every(60).Seconds().Do(crawlCron)
+	s2.Every(60000).Seconds().Do(crawlCron)
 	s2.StartAsync()
 	defer s2.Clear()
 	// End define
