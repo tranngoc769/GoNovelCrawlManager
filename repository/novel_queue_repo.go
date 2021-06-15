@@ -78,3 +78,13 @@ func (repo *NovelQueueRepository) CountNovels(search string) (int, error) {
 	}
 	return int(rows["count"].(int64)), nil
 }
+
+func (repo *NovelQueueRepository) GetAllCategory() ([]map[string]interface{}, error) {
+	rows := []map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("st_category").Find(&rows)
+	if resp.Error != nil {
+		log.Error("NovelQueueRepository ", "GetAllCategory", resp.Error)
+		return []map[string]interface{}{}, resp.Error
+	}
+	return rows, nil
+}
