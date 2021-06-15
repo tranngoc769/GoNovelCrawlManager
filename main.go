@@ -56,7 +56,7 @@ type DataNoveQueue struct {
 }
 
 func Novel(w http.ResponseWriter, r *http.Request) {
-	limit := 4
+	limit := 12
 	vars := mux.Vars(r)
 	page := 1
 	page_arg := vars["page"]
@@ -80,7 +80,7 @@ func Novel(w http.ResponseWriter, r *http.Request) {
 }
 
 func Queue(w http.ResponseWriter, r *http.Request) {
-	limit := 4
+	limit := 12
 	vars := mux.Vars(r)
 	page := 1
 	page_arg := vars["page"]
@@ -257,7 +257,7 @@ func main() {
 	// Cron
 	crawlCron := CronService.RunCron
 	s2 := gocron.NewScheduler(time.UTC)
-	s2.Every(30).Seconds().Do(crawlCron)
+	s2.Every(60).Seconds().Do(crawlCron)
 	s2.StartAsync()
 	defer s2.Clear()
 	// End define
