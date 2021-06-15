@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -257,7 +258,7 @@ func main() {
 	// Cron
 	crawlCron := CronService.RunCron
 	s2 := gocron.NewScheduler(time.UTC)
-	s2.Every(5000).Seconds().Do(crawlCron)
+	s2.Every(30).Seconds().Do(crawlCron)
 	s2.StartAsync()
 	defer s2.Clear()
 	// End define
@@ -311,6 +312,13 @@ func setAppLogger(cfg Config, file *os.File) {
 	switch cfg.LogType {
 	case "DEFAULT":
 		log.SetOutput(os.Stdout)
+	case "FILE":
+		if file != nil {
+			log.SetOutput(io.MultiWriter(os.Stdout, file))
+		} else {
+			log.Error("main ", "Log File "+cfg.LogFile+" error")
+			log.SetOutput(os.Stdout)
+		}
 	default:
 		log.SetOutput(os.Stdout)
 	}

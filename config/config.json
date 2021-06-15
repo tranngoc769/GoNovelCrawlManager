@@ -1,7 +1,7 @@
 {
     "main": {
         "port": "8000",
-        "log_type": "GELF",
+        "log_type": "FILE",
         "log_level": "debug",
         "log_file": "tmp/console.log",
         "db": "enabled"

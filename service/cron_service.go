@@ -2,7 +2,9 @@ package service
 
 import (
 	"fmt"
+	"gonovelcrawlmanager/common/model"
 	"gonovelcrawlmanager/repository"
+	"strconv"
 	"strings"
 
 	"net/http"
@@ -82,12 +84,6 @@ func (c HTTPClient) info(msg string) {
 	log.Printf("[client] %s\n", msg)
 }
 
-func checkError(err error) {
-	if err != nil {
-		log.Println(err)
-	}
-}
-
 type Info struct {
 	Attacker string `json:"attacker"`
 	Country  string `json:"country"`
@@ -96,36 +92,84 @@ type Info struct {
 	Date     string `json:"date"`
 }
 
-func onePage(pathURL string) ([]string, error) {
-	response, err := HttpClient.GetRequestWithRetries(pathURL)
-	checkError(err)
+func GetDescription(doc *goquery.Document) string {
+	description := ""
+	doc.Find("meta[name=description]").Each(func(i int, s *goquery.Selection) {
+		name, _ := s.Attr("name")
+		if name == "description" {
+			description, _ = s.Attr("content")
+		}
+	})
+	return strings.TrimSpace(strings.Replace(description, "online free from your Mobile, Table, PC... Novel Updates Daily", "", -1))
+}
+func CrawlPage(novel model.NovelQueue) {
+	response, err := HttpClient.GetRequestWithRetries(novel.Url)
+	if err != nil {
+		log.Error("Crawl Page", "GetRequestWithRetries - ", err)
+	}
 	defer response.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(response.Body)
-	checkError(err)
+	if err != nil {
+		log.Error("Crawl Page", "NewDocumentFromReader - ", err)
+	}
 	infoList := make([]string, 0)
-	doc.Find("div#chapter-content").Each(func(index int, tableHtml *goquery.Selection) {
-		tableHtml.Find("p").Each(func(indexTr int, pHtml *goquery.Selection) {
-			infoList = append(infoList, pHtml.Text())
+	switch source := novel.Source; source {
+	case "wuxiaworld.com":
+		novelData := model.Novel{}
+		log.Info("Crawl Page", "Source - ", source)
+		// Get Caption
+		name := GetDescription(doc)
+		doc.Find("div#chapter-content").Each(func(index int, tableHtml *goquery.Selection) {
+			tableHtml.Find("p").Each(func(indexTr int, pHtml *goquery.Selection) {
+				if pHtml.Text() != "" {
+					infoList = append(infoList, pHtml.Text())
+				}
+			})
 		})
-	})
-	context := strings.Join(infoList, "\n")
-	_ = context
-	return infoList, nil
+		context := strings.Join(infoList, "\n")
+		novelData.Content = context
+		novelData.Date = time.Now().Format("2006-01-02 15:04:05")
+		novelData.IsDelete = 0
+		novelData.Url = novel.Url
+		novelData.Name = name
+		Novel_Service.CreateNovel(novelData)
+		id := strconv.Itoa(int(novel.ID))
+		NovelQueue_Service.DeleteNovel(id)
+		_ = novelData
+	case "novelfull.com":
+		novelData := model.Novel{}
+		log.Info("Crawl Page", "Source - ", source)
+		// Get Caption
+		name := GetDescription(doc)
+		doc.Find("div#chapter-content").Each(func(index int, tableHtml *goquery.Selection) {
+			tableHtml.Find("p").Each(func(indexTr int, pHtml *goquery.Selection) {
+				if pHtml.Text() != "" {
+					infoList = append(infoList, pHtml.Text())
+				}
+			})
+		})
+		context := strings.Join(infoList, "\n")
+		novelData.Content = context
+		novelData.Date = time.Now().Format("2006-01-02 15:04:05")
+		novelData.IsDelete = 0
+		novelData.Url = novel.Url
+		novelData.Name = name
+		Novel_Service.CreateNovel(novelData)
+		id := strconv.Itoa(int(novel.ID))
+		NovelQueue_Service.DeleteNovel(id)
+		_ = novelData
+	default:
+		log.Error("Crawl Page", "No Source - ", source)
+	}
 }
 
 func (service *CronService) RunCron() (int, interface{}) {
-	// insertData := model.NovelQueue{
-	// 	Url:      "https://",
-	// 	Source:   "wika",
-	// 	Date:     "2021-06-14 12:12:00",
-	// 	IsDelete: 0,
-	// }
 	resp, err := NovelQueue_Service.GetAllUrlInQueue()
-	if err != nil {
-		log.Info("RUN CRON ", "RESP : ", resp)
-		// for
+	for _, novel := range resp {
+		CrawlPage(novel)
 	}
-	// const url = "https://www.wuxiaworld.com/novel/emperors-domination/emperor-chapter-6"
-	// onePage(url)
+	if err != nil {
+		log.Error("CronService ", "RunCron", err)
+	}
 	return 0, nil
 }
