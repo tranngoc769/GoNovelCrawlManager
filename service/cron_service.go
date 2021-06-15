@@ -113,9 +113,9 @@ func CrawlPage(novel model.NovelQueue) {
 		log.Error("Crawl Page", "NewDocumentFromReader - ", err)
 	}
 	infoList := make([]string, 0)
+	novelData := model.Novel{}
 	switch source := novel.Source; source {
 	case "wuxiaworld.com":
-		novelData := model.Novel{}
 		log.Info("Crawl Page", "Source - ", source)
 		// Get Caption
 		name := GetDescription(doc)
@@ -132,12 +132,7 @@ func CrawlPage(novel model.NovelQueue) {
 		novelData.IsDelete = 0
 		novelData.Url = novel.Url
 		novelData.Name = name
-		Novel_Service.CreateNovel(novelData)
-		id := strconv.Itoa(int(novel.ID))
-		NovelQueue_Service.DeleteNovel(id)
-		_ = novelData
 	case "novelfull.com":
-		novelData := model.Novel{}
 		log.Info("Crawl Page", "Source - ", source)
 		// Get Caption
 		name := GetDescription(doc)
@@ -154,13 +149,16 @@ func CrawlPage(novel model.NovelQueue) {
 		novelData.IsDelete = 0
 		novelData.Url = novel.Url
 		novelData.Name = name
-		Novel_Service.CreateNovel(novelData)
-		id := strconv.Itoa(int(novel.ID))
-		NovelQueue_Service.DeleteNovel(id)
-		_ = novelData
 	default:
 		log.Error("Crawl Page", "No Source - ", source)
 	}
+	if novelData.Content == "" && novelData.Name == "" {
+		log.Error("Crawl Page", "RunCron - ", novelData.Url+" is empty !!!")
+		return
+	}
+	Novel_Service.CreateNovel(novelData)
+	id := strconv.Itoa(int(novel.ID))
+	NovelQueue_Service.DeleteNovel(id)
 }
 
 func (service *CronService) RunCron() (int, interface{}) {
