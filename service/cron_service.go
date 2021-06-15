@@ -164,6 +164,7 @@ func CrawlPage(novel model.NovelQueue) {
 }
 
 func (service *CronService) RunCron() (int, interface{}) {
+	log.Error("Crawl Page", "RunCron - ", "Running")
 	resp, err := NovelQueue_Service.GetAllUrlInQueue()
 	for _, novel := range resp {
 		CrawlPage(novel)

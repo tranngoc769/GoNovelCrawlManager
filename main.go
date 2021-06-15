@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -290,8 +289,8 @@ func main() {
 	if port == "" {
 		port = "3001"
 	}
+	log.Info("Crawl Page", "No Source - ", port)
 	http.ListenAndServe(":"+port, r)
-	fmt.Print("Server is running " + port)
 }
 func setAppLogger(cfg Config, file *os.File) {
 	log.SetFormatter(&log.TextFormatter{
