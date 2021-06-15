@@ -18,19 +18,12 @@ func NewNovelService() NovelService {
 	}
 }
 
-func (service *NovelService) CreateNovel(entry model.Novel) (int, interface{}) {
+func (service *NovelService) CreateNovel(entry model.Novel) (interface{}, error) {
 	resp, err := repository.NovelRepo.CreateNovel(entry)
 	if err != nil {
-		return response.NotFound()
+		return model.Novel{}, err
 	}
-	return response.NewOKResponse(resp)
-}
-func (service *NovelService) UpdateNovel(id string, data map[string]interface{}) (int, interface{}) {
-	resp, err := repository.NovelRepo.UpdateNovel(id, data)
-	if err != nil {
-		return response.NotFound()
-	}
-	return response.NewOKResponse(resp)
+	return resp, nil
 }
 
 func (service *NovelService) DeleteNovel(id string) (int, interface{}) {
@@ -47,4 +40,12 @@ func (service *NovelService) GetNovelPaging(page int, limit int) ([]model.Novel,
 
 func (service *NovelService) CountNovels(search string) (int, error) {
 	return repository.NovelRepo.CountNovels(search)
+}
+
+func (service *NovelService) IsExistStoryCategory(storyId string) (bool, error) {
+	return repository.NovelRepo.IsExistStoryCategory(storyId)
+}
+
+func (service *NovelService) CreateStoryCategory(storyId string, cate string) (bool, error) {
+	return repository.NovelRepo.CreateStoryCategory(storyId, cate)
 }
