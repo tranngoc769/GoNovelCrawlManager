@@ -5,11 +5,11 @@ type Novel struct {
 	Title           string `gorm:"column:title;type:varchar(255);"`
 	OtherName       string `gorm:"column:other_name;type:varchar(255);"`
 	Content         string `gorm:"column:content;type:text;"`
-	Thumbnail       string `gorm:"column:url;type:varchar(255);"`
-	IsStatus        string `gorm:"column:is_status;type:int;"`
-	AccountId       string `gorm:"column:account_id;type:int;"`
+	Thumbnail       string `gorm:"column:thumbnail;type:varchar(255);"`
+	IsStatus        int    `gorm:"column:is_status;type:int;"`
+	AccountId       int    `gorm:"column:account_id;type:int;"`
 	Slug            string `gorm:"column:slug;type:varchar(255);"`
-	Description     string `gorm:"column:url;type:varchar(255);"`
+	Description     string `gorm:"column:description;type:varchar(255);"`
 	AuthorName      string `gorm:"column:author_name;type:varchar(150);"`
 	AuthorSlug      string `gorm:"column:author_slug;type:varchar(150);"`
 	Metatile        string `gorm:"column:meta_title;type:varchar(255);"`
@@ -17,6 +17,7 @@ type Novel struct {
 	MetaKeyword     string `gorm:"column:meta_keyword;type:varchar(255);"`
 	CreatedTime     string `gorm:"column:created_time;type:longtext;"`
 	UpdatedTime     string `gorm:"column:updated_time;type:longtext;"`
+	Url             string `gorm:"column:crawler_href;type:varchar(255);"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -51,6 +52,7 @@ type NovelQueue struct {
 	Source   string `gorm:"column:source;type:varchar(255);" json:"source"`
 	Date     string `gorm:"column:date;type:longtext;" json:"date"`
 	IsDelete int    `gorm:"column:is_delete;type:bit" json:"is_delete"`
+	Category int    `gorm:"column:category_id;type:int" json:"category_id"`
 }
 
 // TableName sets the insert table name for this struct type
