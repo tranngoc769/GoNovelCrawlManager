@@ -30,13 +30,12 @@ type Chapter struct {
 	Title       string `gorm:"column:title;type:int;"`
 	StoryId     uint   `gorm:"column:story_id;type:varchar(255);"`
 	StorySlug   string `gorm:"column:story_slug;type::varchar(255);"`
-	Thumbnail   string `gorm:"column:url;type:varchar(255);"`
-	AccountId   string `gorm:"column:account_id;type:int;"`
-	IsStatus    string `gorm:"column:is_status;type:int;"`
-	IsRobot     string `gorm:"column:is_robot;type:int;"`
+	AccountId   int    `gorm:"column:account_id;type:int;"`
+	IsStatus    int    `gorm:"column:is_status;type:int;"`
+	IsRobot     int    `gorm:"column:is_robot;type:int;"`
 	Slug        string `gorm:"column:slug;type:varchar(255);"`
 	Content     string `gorm:"column:content;type:text;"`
-	Chappter    uint   `gorm:"column:chappter;type:int;"`
+	Chapter     uint   `gorm:"column:chapter;type:int;"`
 	CreatedTime string `gorm:"column:created_time;type:longtext;"`
 	UpdatedTime string `gorm:"column:updated_time;type:longtext;"`
 }
