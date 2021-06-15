@@ -59,14 +59,11 @@ func (repo *ChapterRepository) CountChapters(search string) (int, error) {
 }
 
 // Chapter
-func (repo *ChapterRepository) IsStoryExist(url string) (bool, model.Chapter, error) {
+func (repo *ChapterRepository) IsChapterExist(slug string, chapter_id int) (bool, model.Chapter, error) {
 	rows := model.Chapter{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.Chapter{}).Where("crawler_href = ?", url).Limit(1).Take(&rows)
-	if resp.Error != nil {
-		return false, rows, resp.Error
-	}
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.Chapter{}).Where("slug = ? and chapter = ?", slug, chapter_id).Limit(1).Take(&rows)
 	if resp.RowsAffected < 1 {
-		return false, rows, resp.Error
+		return false, rows, nil
 	}
 	return true, rows, nil
 }
