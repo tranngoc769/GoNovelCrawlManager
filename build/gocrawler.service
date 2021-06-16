@@ -1,0 +1,14 @@
+Description= gocrawler
+After=network.target
+
+[Service]
+User=root
+Group=root
+EnvironmentFile=/root/go/env/gocrawler-env
+WorkingDirectory=/root/go/bin
+ExecStart=/root/go/bin/gocrawler
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

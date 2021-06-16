@@ -1,10 +1,13 @@
 {
     "main": {
-        "port": "8000",
+        "port": "6565",
         "log_type": "FILE",
         "log_level": "error",
         "log_file": "tmp/console.log",
-        "db": "enabled"
+        "db": "enabled",
+        "crawl_mode": 1,
+        "scheldule_time": "11:00",
+        "scheludle_time_loop": 6000
     },
     "db": {
         "driver": "mysql",

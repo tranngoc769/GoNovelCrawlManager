@@ -266,7 +266,19 @@ func main() {
 	// Cron
 	crawlCron := CronService.RunCron
 	s2 := gocron.NewScheduler(time.UTC)
-	s2.Every(60000).Seconds().Do(crawlCron)
+	mode := viper.Get("main.crawl_mode").(int)
+	switch mode {
+	case 1:
+		{
+			time := viper.Get("main.scheldule_time").(string)
+			s2.Every(1).Day().Tag("hook_status").At(time).Do(crawlCron)
+		}
+	case 2:
+		{
+			time := viper.Get("main.scheludle_time_loop").(int)
+			s2.Every(time).Seconds().Do(crawlCron)
+		}
+	}
 	s2.StartAsync()
 	defer s2.Clear()
 	// End define
@@ -280,7 +292,7 @@ func main() {
 	// Queue
 	router.HandleFunc("/queue/page/{page}", Queue)
 	router.HandleFunc("/queue", Queue)
-	port := os.Getenv("PORT")
+	port := config.Port
 	// Delete queue
 	router.HandleFunc("/queue/delete/{id}", DeleteQueue)
 	router.HandleFunc("/queue/delete/", DeleteQueue)
@@ -298,7 +310,7 @@ func main() {
 	if port == "" {
 		port = "3001"
 	}
-	log.Info("Crawl Page", "No Source - ", port)
+	log.Info("Crawl Page", "Server running on : ", port)
 	http.ListenAndServe(":"+port, r)
 }
 func setAppLogger(cfg Config, file *os.File) {
