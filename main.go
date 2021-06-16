@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io"
 	"net/http"
 	"os"
@@ -24,6 +25,11 @@ import (
 )
 
 var CronService interface{}
+
+type PreviewRequest struct {
+	Url    string `json:"url"`
+	Source string `json:"source"`
+}
 
 func makeRange(min, max int) []int {
 	a := make([]int, max-min+1)
@@ -147,6 +153,27 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	data["backlink"] = "/add"
 	tmpl := template.Must(template.ParseFiles("templates/erro.html"))
 	tmpl.Execute(w, data)
+}
+func Preview(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var req PreviewRequest
+	err := decoder.Decode(&req)
+	if err != nil {
+		// handle error
+		return
+	}
+	url := req.Url
+	source := req.Source
+	preview, err := service.GetPreview(url, source)
+	if err != nil {
+		preview["code"] = 404
+		w.Header().Set("Content-Type", "application/json")
+	} else {
+		preview["code"] = 200
+	}
+	js, _ := json.Marshal(preview)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 }
 func DeleteQueue(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -303,6 +330,8 @@ func main() {
 
 	router.HandleFunc("/add/", AddQueue)
 	router.HandleFunc("/queue_add", AddQueuePost).Methods("POST")
+	router.HandleFunc("/preview", Preview).Methods("POST")
+	router.HandleFunc("/preview", Preview)
 	// Test
 
 	router.HandleFunc("/test", Test)

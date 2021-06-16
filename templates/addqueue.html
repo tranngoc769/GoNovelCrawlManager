@@ -148,7 +148,7 @@
                     </div>
                     <!-- end page title -->
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="card">
                                 <form class="card-body" action="/queue_add" method="POST">
                                     <h4 class="card-title">Nhập đường dẫn và nguồn trích</h4>
@@ -156,13 +156,13 @@
                                     <div class="form-group row">
                                         <label for="example-url-input" class="col-md-2 col-form-label">URL</label>
                                         <div class="col-md-10">
-                                            <input name="url" class="form-control" type="url" value="" id="example-url-input">
+                                            <input name="url" id="url" class="form-control" type="url" value="" id="example-url-input">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Nguồn</label>
                                         <div class="col-md-10">
-                                            <select name="source" class="form-control">
+                                            <select name="source" id="source" class="form-control">
                                                 <option value="wuxiaworld.com"selected>WUXIAWORLD.COM</option>
                                                 <option value="novelfull.com">NOVELFULL.COM</option>
                                             </select>
@@ -182,6 +182,20 @@
                                         <div class="col-md-12">
                                             <button type="submit" id="add_queue" type="button" class="form-control">Thêm vào hàng đợi</button>
                                         </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <form class="card-body" action="/queue_add" method="POST">
+                                    <h4 class="card-title">Preview</h4>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <button type="submit" id="get_preview" type="button" class="form-control">Xem thông tin</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="information">
                                     </div>
                                 </form>
                             </div>

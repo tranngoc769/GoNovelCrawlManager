@@ -123,7 +123,7 @@ func GetMetaInfo(doc *goquery.Document) (string, string, string) {
 	description := ""
 	title := ""
 	keywords := ""
-	doc.Find("meta").Each(func(i int, s *goquery.Selection) {
+	doc.Find("meta").Each(func(_ int, s *goquery.Selection) {
 		name, _ := s.Attr("name")
 		if name == "description" {
 			description, _ = s.Attr("content")
@@ -137,11 +137,54 @@ func GetMetaInfo(doc *goquery.Document) (string, string, string) {
 	})
 	return description, title, keywords
 }
+func GetPreview(url string, source string) (map[string]interface{}, error) {
+	preview := map[string]interface{}{}
+	response, err := HttpClient.GetRequestWithRetries(url)
+	if err != nil {
+		log.Error("Crawl Page", "GetRequestWithRetries - ", err)
+		return preview, err
+	}
+	defer response.Body.Close()
+	doc, err := goquery.NewDocumentFromReader(response.Body)
+	if err != nil {
+		log.Error("Crawl Page", "NewDocumentFromReader - ", err)
+	}
+	switch source {
+	case "wuxiaworld.com":
+		{
+			doc.Find("div[class=novel-left] > a").Each(func(index int, tableHtml *goquery.Selection) {
+				tableHtml.Find("img").Each(func(indexTr int, pHtml *goquery.Selection) {
+					preview["image"], _ = pHtml.Attr("src")
+				})
+			})
+			doc.Find("div[class=novel-body]").Each(func(i int, s *goquery.Selection) {
+				if i == 0 {
+					preview["info"], _ = s.Html()
+				}
+			})
+		}
+	case "novelfull.com":
+		{
+			doc.Find("div[class=book]").Each(func(index int, tableHtml *goquery.Selection) {
+				tableHtml.Find("img").Each(func(indexTr int, pHtml *goquery.Selection) {
+					preview["image"], _ = pHtml.Attr("src")
+					preview["image"] = "https://" + "novelfull.com" + preview["image"].(string)
+				})
+			})
+			doc.Find("div[class=info]").Each(func(i int, s *goquery.Selection) {
+				if i == 0 {
+					preview["info"], _ = s.Html()
+				}
+			})
+		}
+	}
+	return preview, nil
+}
 func GetAuthor(doc *goquery.Document) (string, string) {
 	author := ""
 	test := doc.Find("div[class=info]")
 	_ = test
-	doc.Find("div[class=info]").Each(func(i int, s *goquery.Selection) {
+	doc.Find("div[class=info]").Each(func(_ int, s *goquery.Selection) {
 		s.Find("div").Each(func(j int, s2 *goquery.Selection) {
 			if j == 0 {
 				author = s2.Text()

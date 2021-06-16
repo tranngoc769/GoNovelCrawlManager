@@ -4741,3 +4741,8 @@ input[switch=dark]:checked+label {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
