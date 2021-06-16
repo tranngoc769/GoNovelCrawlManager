@@ -218,6 +218,7 @@ func CrawlChapter(source string, url string) (model.Chapter, error) {
 		})
 		context := strings.Join(infoList, "\n")
 		chapterData.Content = context
+		chapterData.CreatedTime = time.Now().Format("2006-01-02 15:04:05")
 		chapterData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
 		chapterData.Title = name
 	case "novelfull.com":
@@ -329,6 +330,7 @@ func CrawlStory(novel model.NovelQueue) (model.Novel, []string, error) {
 		novelData.Title = title
 		title_slug := GetSlugFromURL(novel.Url)
 		novelData.Slug = title_slug
+		novelData.CreatedTime = time.Now().Format("2006-01-02 15:04:05")
 		novelData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
 		novelData.Url = novel.Url
 		author := strings.Join(infoList, "-")
@@ -402,6 +404,7 @@ func CrawlStory(novel model.NovelQueue) (model.Novel, []string, error) {
 		return novelData, urlList, nil
 	}
 	novelData.CreatedTime = time.Now().Format("2006-01-02 15:04:05")
+	novelData.UpdatedTime = time.Now().Format("2006-01-02 15:04:05")
 	newNovel, err = Novel_Service.CreateNovel(novelData)
 	if err != nil {
 		return model.Novel{}, urlList, errors.New("empty")

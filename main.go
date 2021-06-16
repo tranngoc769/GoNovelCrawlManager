@@ -128,7 +128,7 @@ func AddQueuePost(w http.ResponseWriter, r *http.Request) {
 	}
 	data := map[string]interface{}{}
 	data["backlink"] = "/add"
-	data["Msg"] = "Thêm URL không thành công"
+	data["Msg"] = "Thêm URL Add URL failde"
 	if url == "" || source == "" {
 		tmpl := template.Must(template.ParseFiles("templates/erro.html"))
 		tmpl.Execute(w, data)
@@ -266,16 +266,16 @@ func main() {
 	// Cron
 	crawlCron := CronService.RunCron
 	s2 := gocron.NewScheduler(time.UTC)
-	mode := viper.Get("main.crawl_mode").(int)
+	mode := viper.GetInt("main.crawl_mode")
 	switch mode {
 	case 1:
 		{
-			time := viper.Get("main.scheldule_time").(string)
+			time := viper.GetString("main.scheldule_time")
 			s2.Every(1).Day().Tag("hook_status").At(time).Do(crawlCron)
 		}
 	case 2:
 		{
-			time := viper.Get("main.scheludle_time_loop").(int)
+			time := viper.GetInt("main.scheludle_time_loop")
 			s2.Every(time).Seconds().Do(crawlCron)
 		}
 	}
@@ -310,7 +310,7 @@ func main() {
 	if port == "" {
 		port = "3001"
 	}
-	log.Info("Crawl Page", "Server running on : ", port)
+	log.Error("Crawl Page", "Server running on : ", port)
 	http.ListenAndServe(":"+port, r)
 }
 func setAppLogger(cfg Config, file *os.File) {
