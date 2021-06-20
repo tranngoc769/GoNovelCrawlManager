@@ -1291,13 +1291,6 @@ body[data-layout=horizontal][data-layout-size=boxed] .navbar-header {
 }
 
 .waves-button,
-.waves-circle {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-mask-image: -webkit-radial-gradient(circle, #fff 100%, #000 100%)
-}
-
-.waves-button,
 .waves-button-input,
 .waves-button:hover,
 .waves-button:visited {
@@ -1347,14 +1340,6 @@ body[data-layout=horizontal][data-layout-size=boxed] .navbar-header {
     height: 2.5em;
     line-height: 2.5em;
     border-radius: 50%
-}
-
-.waves-float {
-    -webkit-mask-image: none;
-    -webkit-box-shadow: 0 1px 1.5px 1px rgba(0, 0, 0, .12);
-    box-shadow: 0 1px 1.5px 1px rgba(0, 0, 0, .12);
-    -webkit-transition: all .3s;
-    transition: all .3s
 }
 
 .waves-float:active {
@@ -4745,4 +4730,82 @@ input[switch=dark]:checked+label {
 a.disabled {
     pointer-events: none;
     cursor: default;
+}
+
+
+/* 
+ */
+
+.panel {
+    width: 100%;
+    border: none;
+}
+
+.panel-body {
+    position: relative;
+}
+
+.panel {
+    margin-bottom: 20px;
+    border-color: #ddd;
+    color: #333;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+}
+
+.mr-10 {
+    right: 10px;
+}
+
+.bg-teal {
+    background-color: #009688;
+    border-color: #009688;
+    color: #fff;
+}
+
+.btn i {
+    font-size: 16px;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.text-white,
+.text-white:focus,
+.text-white:hover {
+    color: #fff!important;
+}
+
+.position-right {
+    margin-left: 7px;
+}
+
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.mr-10 {
+    margin-right: 10px!important;
+}
+
+.select2 {
+    min-width: 300px !important;
+    width: 100% !important;
 }

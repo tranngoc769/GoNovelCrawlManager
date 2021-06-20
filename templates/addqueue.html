@@ -15,6 +15,10 @@
     <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="/statics/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+    <link href="https://preview.colorlib.com/theme/bootstrap/multiselect-05/css/style.css" id="app-style" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
@@ -29,22 +33,30 @@
                     <div class="navbar-brand-box">
                         <a href="index.html" class="logo logo-dark">
                             <span class="logo-sm">
-                                    <img src="/statics/assets/images/logo.svg" alt="" height="22">
+                                    <img src="/statics/assets/images/logo.svg"
+                                        alt="" height="22">
                                 </span>
                             <span class="logo-lg">
-                                    <img src="/statics/assets/images/logo-dark.png" alt="" height="17">
+                                    <img
+                                        src="/statics/assets/images/logo-dark.png"
+                                        alt="" height="17">
                                 </span>
                         </a>
                         <a href="index.html" class="logo logo-light">
                             <span class="logo-sm">
-                                    <img src="/statics/assets/images/logo-light.svg" alt="" height="22">
+                                    <img
+                                        src="/statics/assets/images/logo-light.svg"
+                                        alt="" height="22">
                                 </span>
                             <span class="logo-lg">
-                                    <img src="/statics/assets/images/logo-light.png" alt="" height="19">
+                                    <img
+                                        src="/statics/assets/images/logo-light.png"
+                                        alt="" height="19">
                                 </span>
                         </a>
                     </div>
-                    <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
+                    <button type="button" class="btn btn-sm px-3
+                            font-size-16 header-item waves-effect" id="vertical-menu-btn">
                             <i class="fa fa-fw fa-bars"></i>
                         </button>
                     <!-- App Search-->
@@ -57,16 +69,20 @@
                 </div>
                 <div class="d-flex">
                     <div class="dropdown d-inline-block d-lg-none ml-2">
-                        <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn header-item
+                                noti-icon waves-effect" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="mdi mdi-magnify"></i>
                             </button>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" aria-labelledby="page-header-search-dropdown">
+                        <div class="dropdown-menu dropdown-menu-lg
+                                dropdown-menu-right p-0" aria-labelledby="page-header-search-dropdown">
                             <form class="p-3">
                                 <div class="form-group m-0">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                        <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's
+                                                username">
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                            <button class="btn btn-primary" type="submit"><i class="mdi
+                                                        mdi-magnify"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -74,20 +90,26 @@
                         </div>
                     </div>
                     <div class="dropdown d-none d-lg-inline-block ml-1">
-                        <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+                        <button type="button" class="btn header-item
+                                noti-icon waves-effect" data-toggle="fullscreen">
                                 <i class="bx bx-fullscreen"></i>
                             </button>
                     </div>
                     <div class="dropdown d-inline-block">
-                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="/statics/assets/images/users/avatar-1.jpg"
+                        <button type="button" class="btn header-item
+                                waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user"
+                                    src="/statics/assets/images/users/avatar-1.jpg"
                                     alt="Header Avatar">
-                                <span class="d-none d-xl-inline-block ml-1" key="t-henry">Admin</span>
-                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                                <span class="d-none d-xl-inline-block ml-1"
+                                    key="t-henry">Admin</span>
+                                <i class="mdi mdi-chevron-down d-none
+                                    d-xl-inline-block"></i>
                             </button>
                     </div>
                     <div class="dropdown d-inline-block">
-                        <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
+                        <button type="button" class="btn header-item
+                                noti-icon right-bar-toggle waves-effect">
                                 <i class="bx bx-cog bx-spin"></i>
                             </button>
                     </div>
@@ -135,12 +157,15 @@
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between">
+                            <div class="page-title-box d-flex
+                                    align-items-center justify-content-between">
                                 <h4 class="mb-0 font-size-18">Hàng đợi</h4>
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Trang chủ</a></li>
-                                        <li class="breadcrumb-item active">Hàng đợi</li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Trang
+                                                    chủ</a></li>
+                                        <li class="breadcrumb-item active">Hàng đợi
+                                        </li>
                                     </ol>
                                 </div>
                             </div>
@@ -152,7 +177,8 @@
                             <div class="card">
                                 <form class="card-body" action="/queue_add" method="POST">
                                     <h4 class="card-title">Nhập đường dẫn và nguồn trích</h4>
-                                    <p class="card-title-desc">Hàng đợi sẽ được <code>tự động crawl</code> vào lúc <code>23:00</code> <code>hằng ngày</code>.</p>
+                                    <p class="card-title-desc">Hàng đợi sẽ được <code>tự động crawl</code> vào lúc <code>23:00</code> <code>hằng
+                                                ngày</code>.</p>
                                     <div class="form-group row">
                                         <label for="example-url-input" class="col-md-2 col-form-label">URL</label>
                                         <div class="col-md-10">
@@ -160,12 +186,30 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-md-2 col-form-label">Nguồn</label>
+                                        <label class="col-md-2
+                                                col-form-label">Nguồn</label>
                                         <div class="col-md-10">
                                             <select name="source" id="source" class="form-control">
-                                                <option value="wuxiaworld.com"selected>WUXIAWORLD.COM</option>
-                                                <option value="novelfull.com">NOVELFULL.COM</option>
+                                                    <option
+                                                        value="wuxiaworld.com"
+                                                        selected>WUXIAWORLD.COM</option>
+                                                    <option
+                                                        value="novelfull.com">NOVELFULL.COM</option>
+                                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2
+                                                col-form-label">Thể loại</label>
+                                        <div class="col-md-10">
+                                            <div class="d-flex ">
+                                                <select name="category2" class="js-select2" multiple>
+                                                {{range $cate :=
+                                                    .categories}}
+                                                    <option value="{{.id}}"  data-badge="">{{.title}}</option>
+                                                    {{end}}
                                             </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div style="display: none;" class="form-group row">
@@ -173,19 +217,22 @@
                                             <input name="category" id="category" class="form-control" type="text" value="" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-2 col-form-label">Thể loại</label>
+                                    <!-- <div class="form-group row">
+                                        <label class="col-md-2
+                                                col-form-label">Thể loại</label>
                                         <div class="col-md-10">
-                                            <select  style="height: 50vh;" multiple name="category_select" id="category_select" class="form-control">
-                                                {{range $cate := .categories}}
-                                                <option value="{{.id}}">{{.title}}</option>
-                                                {{end}}
-                                            </select>
+                                            <select style="height: 50vh;" multiple name="category" id="category_select" class="form-control">
+                                                    {{range $cate :=
+                                                    .categories}}
+                                                    <option value="{{.id}}">{{.title}}</option>
+                                                    {{end}}
+                                                </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <button type="submit" id="add_queue" type="button" class="form-control">Thêm vào hàng đợi</button>
+                                            <button type="submit" id="add_queue" type="button" class="form-control">Thêm
+                                                    vào hàng đợi</button>
                                         </div>
                                     </div>
                                 </form>
@@ -197,7 +244,8 @@
                                     <h4 class="card-title">Preview</h4>
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <button type="submit" id="get_preview" type="button" class="form-control">Xem thông tin</button>
+                                            <button type="submit" id="get_preview" type="button" class="form-control">Xem
+                                                    thông tin</button>
                                         </div>
                                     </div>
                                     <div class="form-group row" id="information">
@@ -217,7 +265,8 @@
                         <div class="col-sm-6">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> © Skote.
+                            </script>
+                            © Skote.
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-right d-none d-sm-block">
@@ -235,7 +284,11 @@
     <script src="/statics/assets/libs/metismenu/metisMenu.min.js"></script>
     <script src="/statics/assets/libs/simplebar/simplebar.min.js"></script>
     <script src="/statics/assets/libs/node-waves/waves.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
     <!-- App js -->
+    <script src="https://preview.colorlib.com/theme/bootstrap/multiselect-05/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+    <script src="https://preview.colorlib.com/theme/bootstrap/multiselect-05/js/main.js"></script>
     <script src="/statics/assets/js/app.js"></script>
     <script src="/statics/assets/js/main.js"></script>
 </body>

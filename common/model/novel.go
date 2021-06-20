@@ -51,7 +51,7 @@ type NovelQueue struct {
 	Source   string `gorm:"column:source;type:varchar(255);" json:"source"`
 	Date     string `gorm:"column:date;type:longtext;" json:"date"`
 	IsDelete int    `gorm:"column:is_delete;type:bit" json:"is_delete"`
-	Category int    `gorm:"column:category_id;type:int" json:"category_id"`
+	Category string `gorm:"column:category_id;type:int" json:"category_id"`
 }
 
 // TableName sets the insert table name for this struct type

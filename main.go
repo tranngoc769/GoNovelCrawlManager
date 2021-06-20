@@ -124,13 +124,12 @@ func AddQueuePost(w http.ResponseWriter, r *http.Request) {
 	c_id := r.FormValue("category")
 	now := time.Now()
 	dt := now.Format("2006-01-02 15:04:05")
-	category_id, _ := strconv.Atoi(c_id)
 	novel := model.NovelQueue{
 		Url:      url,
 		Source:   source,
 		Date:     dt,
 		IsDelete: 0,
-		Category: category_id,
+		Category: c_id,
 	}
 	data := map[string]interface{}{}
 	data["backlink"] = "/add"

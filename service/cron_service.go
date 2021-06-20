@@ -458,7 +458,7 @@ func CrawlStory(novel model.NovelQueue) (model.Novel, []string, error) {
 		return model.Novel{}, urlList, errors.New("cannot get category")
 	}
 	if !isExist {
-		caterory_list := strings.Split(strconv.Itoa(novel.Category), ",")
+		caterory_list := strings.Split(novel.Category, ",")
 		for _, ct := range caterory_list {
 			Novel_Service.repo.CreateStoryCategory(strconv.Itoa(int(retNovel.ID)), ct)
 		}
