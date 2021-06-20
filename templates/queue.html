@@ -16,6 +16,8 @@
     <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="/statics/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body data-sidebar="dark">
@@ -193,7 +195,9 @@
                                                     </td>
                                                     <td>
                                                         <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                                        <a href="/queue/delete/{{$novel.ID}}" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-close font-size-18"></i></a>
+                                                    <!-- <a tag="/queue/delete/{{$novel.ID}}" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-close font-size-18"></i></a> -->
+
+                                                        <a tag="/queue/delete/{{$novel.ID}}" name="delete" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-close font-size-18"></i></a>
                                                     </td>
                                                 </tr>
                                                 {{end}}
@@ -243,6 +247,7 @@
     <script src="/statics/assets/libs/node-waves/waves.min.js"></script>
     <!-- App js -->
     <script src="/statics/assets/js/app.js"></script>
+    <script src="/statics/assets/js/main.js"></script>
 </body>
 
 </html>

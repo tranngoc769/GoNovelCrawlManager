@@ -88,3 +88,15 @@ func (repo *NovelQueueRepository) GetAllCategory() ([]map[string]interface{}, er
 	}
 	return rows, nil
 }
+
+func (repo *NovelQueueRepository) IsQueueExist(url string) (bool, error) {
+	rows := []map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("crawl_queue").Find(&rows)
+	if resp.Error != nil {
+		return false, resp.Error
+	}
+	if resp.RowsAffected > 0 {
+		return true, nil
+	}
+	return false, nil
+}

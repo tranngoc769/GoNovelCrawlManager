@@ -168,12 +168,17 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div style="display: none;" class="form-group row">
+                                        <div class="col-md-10">
+                                            <input name="category" id="category" class="form-control" type="text" value="" readonly>
+                                        </div>
+                                    </div>
                                     <div class="form-group row">
                                         <label class="col-md-2 col-form-label">Thể loại</label>
                                         <div class="col-md-10">
-                                            <select name="category" class="form-control">
+                                            <select  style="height: 50vh;" multiple name="category_select" id="category_select" class="form-control">
                                                 {{range $cate := .categories}}
-                                                <option value="{{.id}}"selected>{{.title}}</option>
+                                                <option value="{{.id}}">{{.title}}</option>
                                                 {{end}}
                                             </select>
                                         </div>

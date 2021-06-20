@@ -56,3 +56,7 @@ func (service *NovelQueueService) CountNovels(search string) (int, error) {
 func (service *NovelQueueService) GetAllCategory() ([]map[string]interface{}, error) {
 	return repository.NovelQueueRepo.GetAllCategory()
 }
+
+func (service *NovelQueueService) IsQueueExist(url string) (bool, error) {
+	return repository.NovelQueueRepo.IsQueueExist(url)
+}

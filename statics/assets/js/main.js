@@ -1,5 +1,28 @@
 $(function() {
     console.log("Pitel");
+    $("#category_select").on("change", function(e) {
+        e.preventDefault();
+        let val = $(this).val()
+        $("input[name='category']").val(val)
+    });
+    $("a[name='delete']").on("click", function(e) {
+        e.preventDefault();
+        let val = $(this).attr('tag')
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this url",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                window.location.href = val;
+            } else {
+              swal("Canceled!");
+            }
+          });
+    });
     $("#get_preview").on("click", function(e) {
         e.preventDefault();
         var url = $("input[name='url']")[0].value;
@@ -50,4 +73,7 @@ $(function() {
         });
 
     });
+    
+    $("select[name='category_select'] > option")[0].selected = true
+    $("select[name='category_select']").trigger('change');
 });

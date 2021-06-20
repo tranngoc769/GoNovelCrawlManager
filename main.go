@@ -140,8 +140,16 @@ func AddQueuePost(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, data)
 		return
 	}
+	isExist, _ := service.NovelQueue_Service.IsQueueExist(url)
+	if isExist {
+		data["Msg"] = "Queue đã tồn tại"
+		tmpl := template.Must(template.ParseFiles("templates/erro.html"))
+		tmpl.Execute(w, data)
+		return
+	}
 	code, _ := service.NovelQueue_Service.CreateNovel(novel)
 	if code != 200 {
+		data["Msg"] = "Cannot create queue"
 		tmpl := template.Must(template.ParseFiles("templates/erro.html"))
 		tmpl.Execute(w, data)
 		return
