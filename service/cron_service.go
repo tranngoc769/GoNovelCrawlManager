@@ -556,22 +556,21 @@ func CrawlByList(urlList []string, novel model.Novel, source string) {
 			log.Error("CrawlByPage", "IsChapterExist - ", err)
 		}
 		if isExist {
-			log.Warn("CrawlByPage", "Chapter is exist! Break", "")
-			return
-		}
-		chapterDate, err := CrawlChapter(source, url)
-		if err != nil {
-			log.Error("CrawlByPage", "IsChapterExist - ", err)
-			return
-		}
-		chapterDate.Slug = slug
-		chapterDate.Chapter = uint(id)
-		chapterDate.StoryId = novel.ID
-		chapterDate.StorySlug = novel.Slug
-		_, err = Chapter_Service.repo.CreateChapter(chapterDate)
-		if err != nil {
-			log.Error("CrawlByPage", "CreateChapter - ", err)
-			// return
+			log.Info("CrawlByPage", "Chapter is exist! Break", "")
+		} else {
+			chapterDate, err := CrawlChapter(source, url)
+			if err != nil {
+				log.Info("CrawlByPage", "IsChapterExist - ", err)
+			}
+			chapterDate.Slug = slug
+			chapterDate.Chapter = uint(id)
+			chapterDate.StoryId = novel.ID
+			chapterDate.StorySlug = novel.Slug
+			_, err = Chapter_Service.repo.CreateChapter(chapterDate)
+			if err != nil {
+				log.Error("CrawlByPage", "CreateChapter - ", err)
+				// return
+			}
 		}
 	}
 }
@@ -600,21 +599,20 @@ func CrawlByPage(page int, novel model.Novel, source string) {
 		}
 		if isExist {
 			log.Warn("CrawlByPage", "Chapter is exist! Break", "")
-			return
-		}
-		chapterDate, err := CrawlChapter(source, listChapter[i])
-		if err != nil {
-			log.Error("CrawlByPage", "IsChapterExist - ", err)
-			return
-		}
-		chapterDate.Slug = slug
-		chapterDate.Chapter = uint(id)
-		chapterDate.StoryId = novel.ID
-		chapterDate.StorySlug = novel.Slug
-		_, err = Chapter_Service.repo.CreateChapter(chapterDate)
-		if err != nil {
-			log.Error("CrawlByPage", "CreateChapter - ", err)
-			// return
+		} else {
+			chapterDate, err := CrawlChapter(source, listChapter[i])
+			if err != nil {
+				log.Info("CrawlByPage", "IsChapterExist - ", err)
+			}
+			chapterDate.Slug = slug
+			chapterDate.Chapter = uint(id)
+			chapterDate.StoryId = novel.ID
+			chapterDate.StorySlug = novel.Slug
+			_, err = Chapter_Service.repo.CreateChapter(chapterDate)
+			if err != nil {
+				log.Error("CrawlByPage", "CreateChapter - ", err)
+				// return
+			}
 		}
 	}
 
