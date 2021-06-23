@@ -121,7 +121,20 @@ $(function() {
             </div>
             
             `;
-            $("#information a").addClass("disabled")
+            $("#information a").addClass("disabled");
+            var genreDiv = $('div > h5:contains("Genre")').parent()[0];
+            var listCate = $(genreDiv).find('a');
+            var newID = [];
+            for (let index = 0; index < listCate.length; index++) {
+                const element = listCate[index];
+                if (element.text != undefined) {
+                    let val = translator[element.text];
+                    if (val != undefined) {
+                        newID.push(val);
+                    }
+                }
+            }
+            $(".js-select2").select2().val(newID).trigger("change");
         });
 
     });
