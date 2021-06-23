@@ -1,28 +1,49 @@
 $(function() {
     console.log("Pitel");
-    $(".js-select2").select2({
-        closeOnSelect: false,
-        placeholder: "Chọn các thể loại",
-        allowHtml: true,
-        allowClear: true,
-        tags: true // ÑÐ¾Ð·Ð´Ð°ÐµÑ‚ Ð½Ð¾Ð²Ñ‹Ðµ Ð¾Ð¿Ñ†Ð¸Ð¸ Ð½Ð° Ð»ÐµÑ‚Ñƒ
-    });
-    $(".js-select2").on("change", function() {
+    try {
+        $(".js-select2").select2({
+            closeOnSelect: false,
+            placeholder: "Chọn các thể loại",
+            allowHtml: true,
+            allowClear: true,
+            tags: true // ÑÐ¾Ð·Ð´Ð°ÐµÑ‚ Ð½Ð¾Ð²Ñ‹Ðµ Ð¾Ð¿Ñ†Ð¸Ð¸ Ð½Ð° Ð»ÐµÑ‚Ñƒ
+        });
+        $(".js-select2").on("change", function() {
+            let val = $(this).val()
+            $("input[name='category']").val(val)
+        })
+
+        $('.icons_select2').select2({
+            width: "100%",
+            templateSelection: iformat,
+            templateResult: iformat,
+            allowHtml: true,
+            placeholder: "Click to select an option",
+            dropdownParent: $('.select-icon'), //Ð¾Ð±Ð°Ð²Ð¸Ð»Ð¸ ÐºÐ»Ð°ÑÑ
+            allowClear: true,
+            multiple: false
+        });
+    } catch (error) {
+
+    }
+
+    function extractHostname(url) {
+        var hostname;
+        if (url.indexOf("//") > -1) {
+            hostname = url.split('/')[2];
+        } else {
+            hostname = url.split('/')[0];
+        }
+        hostname = hostname.split(':')[0];
+        hostname = hostname.split('?')[0];
+        return hostname;
+    }
+    $('#url').on('blur', function(e) {
         let val = $(this).val()
-        $("input[name='category']").val(val)
-    })
-
-    $('.icons_select2').select2({
-        width: "100%",
-        templateSelection: iformat,
-        templateResult: iformat,
-        allowHtml: true,
-        placeholder: "Click to select an option",
-        dropdownParent: $('.select-icon'), //Ð¾Ð±Ð°Ð²Ð¸Ð»Ð¸ ÐºÐ»Ð°ÑÑ
-        allowClear: true,
-        multiple: false
+        let hn = extractHostname(val);
+        $("select[name='source']")[0].value = hn;
+        console.log(val)
     });
-
 
     function iformat(icon, badge, ) {
         var originalOption = icon.element;
@@ -92,7 +113,7 @@ $(function() {
                 `
             <div class="col-md-6">
             <h4>Thông tin mô tả</h4>
-            ${response.info.replaceAll("h3","h5").replaceAll('<a','<a disabled ')}
+            ${response.info.replaceAll("h3", "h5").replaceAll('<a', '<a disabled ')}
             </div>
             
             <div class="col-md-6">
@@ -104,7 +125,6 @@ $(function() {
         });
 
     });
-
     // $("select[name='category_select'] > option")[0].selected = true
     // $("select[name='category_select']").trigger('change');
 });

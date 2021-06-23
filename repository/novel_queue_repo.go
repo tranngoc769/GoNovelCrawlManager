@@ -43,7 +43,7 @@ func (repo *NovelQueueRepository) DeleteNovel(id string) (interface{}, error) {
 
 func (repo *NovelQueueRepository) GetAllUrlInQueue() ([]model.NovelQueue, error) {
 	rows := []model.NovelQueue{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Where("is_delete", 0).Order("date").Find(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Order("date").Find(&rows)
 	if resp.Error != nil {
 		log.Error("NovelQueueRepository ", "GetAllUrlInQueue", resp.Error)
 		return []model.NovelQueue{}, resp.Error
@@ -57,7 +57,7 @@ func (repo *NovelQueueRepository) GetNovelPaging(page int, limit int) ([]model.N
 	}
 	offset := (page - 1) * limit
 	rows := []model.NovelQueue{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Select("id,  url, date,  source, is_delete").Where("is_delete", 0).Limit(limit).Offset(offset).Order("date").Find(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Select("id,  url, date,  source").Limit(limit).Offset(offset).Order("date").Find(&rows)
 	if resp.Error != nil {
 		log.Error("NovelQueueRepository ", "GetNovelPaging", resp.Error)
 		return []model.NovelQueue{}, resp.Error
@@ -67,7 +67,7 @@ func (repo *NovelQueueRepository) GetNovelPaging(page int, limit int) ([]model.N
 
 func (repo *NovelQueueRepository) CountNovels(search string) (int, error) {
 	rows := map[string]interface{}{}
-	resp := IMySql.MySqlConnector.GetConn().Table("crawl_queue").Where("is_delete", 0).Select("Count(id) as count")
+	resp := IMySql.MySqlConnector.GetConn().Table("crawl_queue").Select("Count(id) as count")
 	if search != "" {
 		resp = resp.Where("content like %?%", search)
 	}
@@ -81,7 +81,7 @@ func (repo *NovelQueueRepository) CountNovels(search string) (int, error) {
 
 func (repo *NovelQueueRepository) GetAllCategory() ([]map[string]interface{}, error) {
 	rows := []map[string]interface{}{}
-	resp := IMySql.MySqlConnector.GetConn().Table("st_category").Find(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Table("st_category").Order("title asc").Find(&rows)
 	if resp.Error != nil {
 		log.Error("NovelQueueRepository ", "GetAllCategory", resp.Error)
 		return []map[string]interface{}{}, resp.Error

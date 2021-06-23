@@ -4809,3 +4809,6 @@ a.disabled {
     min-width: 300px !important;
     width: 100% !important;
 }
+.select2-container--default{
+    max-height: 400px !important;
+}
