@@ -60,7 +60,3 @@ func (service *NovelQueueService) GetAllCategory() ([]map[string]interface{}, er
 func (service *NovelQueueService) IsQueueExist(url string) (bool, error) {
 	return repository.NovelQueueRepo.IsQueueExist(url)
 }
-
-func (repo *NovelQueueService) GetOtherName() ([]map[string]interface{}, error) {
-	return repository.NovelQueueRepo.GetOtherName()
-}
