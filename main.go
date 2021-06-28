@@ -114,12 +114,7 @@ func AddQueue(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Error("Main", "AddQueue: ", err)
 	}
-	othername, err := service.NovelQueue_Service.GetOtherName()
-	if err != nil {
-		log.Error("Main", "AddQueue: ", err)
-	}
 	data["categories"] = categories
-	data["othername"] = othername
 	tmpl := template.Must(template.ParseFiles("templates/addqueue.html"))
 	tmpl.Execute(w, data)
 }
