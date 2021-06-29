@@ -121,3 +121,15 @@ func (repo *NovelQueueRepository) IsMakeCompleted(url string) (bool, error) {
 	}
 	return false, nil
 }
+
+func (repo *NovelQueueRepository) GetOtherName() ([]map[string]interface{}, error) {
+	rows := []map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("othercategoryname").Find(&rows)
+	if resp.Error != nil {
+		return rows, resp.Error
+	}
+	if resp.RowsAffected > 0 {
+		return rows, nil
+	}
+	return rows, nil
+}
