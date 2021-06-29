@@ -49,3 +49,7 @@ func (service *NovelService) IsExistStoryCategory(storyId string) (bool, error) 
 func (service *NovelService) CreateStoryCategory(storyId string, cate string) (bool, error) {
 	return repository.NovelRepo.CreateStoryCategory(storyId, cate)
 }
+
+func (service *NovelService) GetStoryChapter(storyId string) ([]map[string]interface{}, error) {
+	return repository.NovelRepo.GetStoryChapter(storyId)
+}

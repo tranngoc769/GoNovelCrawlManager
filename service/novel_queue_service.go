@@ -41,6 +41,14 @@ func (service *NovelQueueService) DeleteNovel(id string) (int, interface{}) {
 	return response.NewOKResponse(resp)
 }
 
+func (service *NovelQueueService) MakeQueueComplete(id string) (int, interface{}) {
+	resp, err := repository.NovelQueueRepo.MakeQueueComplete(id)
+	if err != nil {
+		return response.NotFound()
+	}
+	return response.NewOKResponse(resp)
+}
+
 func (service *NovelQueueService) GetAllUrlInQueue() ([]model.NovelQueue, error) {
 	return repository.NovelQueueRepo.GetAllUrlInQueue()
 }
@@ -59,4 +67,8 @@ func (service *NovelQueueService) GetAllCategory() ([]map[string]interface{}, er
 
 func (service *NovelQueueService) IsQueueExist(url string) (bool, error) {
 	return repository.NovelQueueRepo.IsQueueExist(url)
+}
+
+func (service *NovelQueueService) IsMakeCompleted(url string) (bool, error) {
+	return repository.NovelQueueRepo.IsMakeCompleted(url)
 }

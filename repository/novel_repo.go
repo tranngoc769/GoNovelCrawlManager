@@ -103,3 +103,11 @@ func (repo *NovelRepository) CreateStoryCategory(storyId string, category_id str
 	}
 	return false, nil
 }
+func (repo *NovelRepository) GetStoryChapter(storyId string) ([]map[string]interface{}, error) {
+	rows := []map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Table("st_chapter").Select("slug", "chapter").Where("story_id", storyId).Find(&rows)
+	if resp.Error != nil {
+		return rows, resp.Error
+	}
+	return rows, nil
+}

@@ -41,6 +41,15 @@ func (repo *NovelQueueRepository) DeleteNovel(id string) (interface{}, error) {
 	return nil, nil
 }
 
+func (repo *NovelQueueRepository) MakeQueueComplete(id string) (interface{}, error) {
+	err := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Where("id = ?", id).Update("is_delete", 1).Error
+	if err != nil {
+		log.Error("NovelQueueRepository ", "MakeQueueComplete", err)
+		return nil, err
+	}
+	return nil, nil
+}
+
 func (repo *NovelQueueRepository) GetAllUrlInQueue() ([]model.NovelQueue, error) {
 	rows := []model.NovelQueue{}
 	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Order("date").Find(&rows)
@@ -92,6 +101,18 @@ func (repo *NovelQueueRepository) GetAllCategory() ([]map[string]interface{}, er
 func (repo *NovelQueueRepository) IsQueueExist(url string) (bool, error) {
 	rows := []map[string]interface{}{}
 	resp := IMySql.MySqlConnector.GetConn().Where("url = ?", url).Table("crawl_queue").Find(&rows)
+	if resp.Error != nil {
+		return false, resp.Error
+	}
+	if resp.RowsAffected > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
+func (repo *NovelQueueRepository) IsMakeCompleted(url string) (bool, error) {
+	rows := []map[string]interface{}{}
+	resp := IMySql.MySqlConnector.GetConn().Where("url = ? And is_delete = 1", url).Table("crawl_queue").Find(&rows)
 	if resp.Error != nil {
 		return false, resp.Error
 	}
