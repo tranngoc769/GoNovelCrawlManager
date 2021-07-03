@@ -335,27 +335,37 @@ func CrawlStory(novel model.NovelQueue) (bool, model.Novel, []string, error) {
 		log.Error("Crawl Page", "NewDocumentFromReader - ", err)
 	}
 	var infoList []string
-
-	doc.Find("div[class=info]").Each(func(i int, s *goquery.Selection) {
-		if i == 0 {
-			infoList = append(infoList, s.Text())
-		}
-	})
-	desc := strings.TrimSpace(strings.Join(infoList, "\n"))
-	if strings.Contains(desc, "Status:Completed") {
-		_ = desc
-		onGo = false
-		// return false, model.Novel{}, urlList, nil
-	} else {
+	switch source := novel.Source; source {
+	case WUXIA:
 		onGo = true
+	case NOVEL_FULL:
+
+		doc.Find("div[class=info]").Each(func(i int, s *goquery.Selection) {
+			if i == 0 {
+				infoList = append(infoList, s.Text())
+			}
+		})
+		desc := strings.TrimSpace(strings.Join(infoList, "\n"))
+		if strings.Contains(desc, "Status:Completed") {
+			_ = desc
+			onGo = false
+			// return false, model.Novel{}, urlList, nil
+		} else {
+			onGo = true
+		}
 	}
 	infoList = nil
 	isExist, novel_exist, _ := Novel_Service.repo.IsStoryExist(novel.Url)
 	if isExist {
-		doc.Find("li.chapter-item>a").Each(func(index int, tableHtml *goquery.Selection) {
-			test, _ := tableHtml.Attr("href")
-			urlList = append(urlList, "https://wuxiaworld.com"+test)
-		})
+		switch source := novel.Source; source {
+		case WUXIA:
+			doc.Find("li.chapter-item>a").Each(func(index int, tableHtml *goquery.Selection) {
+				test, _ := tableHtml.Attr("href")
+				urlList = append(urlList, "https://www.wuxiaworld.com"+test)
+			})
+		case NOVEL_FULL:
+			_ = onGo
+		}
 		return onGo, novel_exist, urlList, nil
 	}
 	novelData := model.Novel{}
@@ -363,6 +373,11 @@ func CrawlStory(novel model.NovelQueue) (bool, model.Novel, []string, error) {
 	case WUXIA:
 		// log.Info("Crawl Page", "Source - ", source)
 		// Get Caption
+		// GET URL LIST
+		doc.Find("li.chapter-item>a").Each(func(index int, tableHtml *goquery.Selection) {
+			test, _ := tableHtml.Attr("href")
+			urlList = append(urlList, "https://www.wuxiaworld.com"+test)
+		})
 		metaDes, metaKeys, metaTitle := GetMetaInfo(doc)
 		novelData.MetaDescription = metaDes
 		novelData.MetaKeyword = metaKeys
@@ -550,7 +565,7 @@ func GetChapterInPages(url string, source string, page int) []string {
 	return listChapters
 }
 
-func CrawlByList(urlList []string, novel model.Novel, source string) {
+func CrawlByList(urlList []string, novel model.Novel, source string, onGoing bool, queueID string, isComplete bool) {
 	if len(urlList) == 0 {
 		return
 	}
@@ -675,11 +690,43 @@ func (service *CronService) RunCron() (int, interface{}) {
 		if err != nil {
 			log.Error("CronService ", "CrawlStory", err)
 		} else {
+			isComplete, _ := NovelQueue_Service.IsMakeCompleted(novel.Url)
 			switch novel.Source {
 			case WUXIA:
-				CrawlByList(urlList, story, novel.Source)
+				if isComplete {
+					CrawlByList(urlList, story, novel.Source, onGoing, strconv.Itoa(int(novel.ID)), isComplete)
+				} else {
+					listChapter_db, _ := Novel_Service.GetStoryChapter(strconv.Itoa(int(story.ID)))
+					_ = listChapter_db
+					listChapter_site := urlList
+					for i := 0; i < len(listChapter_db); i++ {
+						story.Url = strings.Replace(story.Url, "https://wuxiaworld.com", "https://www.wuxiaworld.com", -1)
+						tmp := story.Url + "/" + listChapter_db[i]["slug"].(string)
+						ix := indexOf(tmp, listChapter_site)
+						if ix > -1 {
+							listChapter_site = RemoveSlugFromList(listChapter_site, ix)
+						}
+					}
+					// Crawl list diff
+					for i := 0; i < len(listChapter_site); i++ {
+						sl := GetSlugFromURL(listChapter_site[i])
+						chap_slug := sl
+						id := GetChapterIdFromSlug(chap_slug)
+						chapterDate, err := CrawlChapter(WUXIA, listChapter_site[i])
+						if err != nil {
+							log.Info("CrawlByPageRev", "IsChapterExist - ", err)
+						}
+						chapterDate.Slug = chap_slug
+						chapterDate.Chapter = uint(id)
+						chapterDate.StoryId = story.ID
+						chapterDate.StorySlug = story.Slug
+						_, err = Chapter_Service.repo.CreateChapter(chapterDate)
+						if err != nil {
+							log.Error("CrawlByPageRev", "CreateChapter - ", err)
+						}
+					}
+				}
 			case NOVEL_FULL:
-				isComplete, _ := NovelQueue_Service.IsMakeCompleted(novel.Url)
 				// true --> only get update chap
 				page := GetLastestPage(story, novel.Source)
 				if isComplete {

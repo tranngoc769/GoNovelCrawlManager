@@ -28,6 +28,7 @@ $(function() {
     }
 
     function extractHostname(url) {
+        url = url.replace("www.", "")
         var hostname;
         if (url.indexOf("//") > -1) {
             hostname = url.split('/')[2];
@@ -40,7 +41,7 @@ $(function() {
     }
     $('#url').on('blur', function(e) {
         let val = $(this).val()
-        let hn = extractHostname(val);
+        let hn = extractHostname(val.replaceAll("wwww.", ""));
         $("select[name='source']")[0].value = hn;
         console.log(val)
     });
@@ -122,15 +123,29 @@ $(function() {
             
             `;
             $("#information a").addClass("disabled");
-            var genreDiv = $('div > h5:contains("Genre")').parent()[0];
-            var listCate = $(genreDiv).find('a');
             var newID = [];
-            for (let index = 0; index < listCate.length; index++) {
-                const element = listCate[index];
-                if (element.text != undefined) {
-                    let val = translator[element.text];
-                    if (val != undefined) {
-                        newID.push(val);
+            // 
+            if ($("select[name='source']")[0].value == "novelfull.com") {
+                var genreDiv = $('div > h5:contains("Genre")').parent()[0];
+                var listCate = $(genreDiv).find('a');
+                for (let index = 0; index < listCate.length; index++) {
+                    const element = listCate[index];
+                    if (element.text != undefined) {
+                        let val = translator[element.text];
+                        if (val != undefined) {
+                            newID.push(val);
+                        }
+                    }
+                }
+            } else {
+                var listCate = $(".genres.pt-10").find('a');
+                for (let index = 0; index < listCate.length; index++) {
+                    const element = listCate[index];
+                    if (element.text != undefined) {
+                        let val = translator[element.text];
+                        if (val != undefined) {
+                            newID.push(val);
+                        }
                     }
                 }
             }
