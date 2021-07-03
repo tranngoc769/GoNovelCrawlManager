@@ -75,7 +75,7 @@ func (repo *NovelRepository) CountNovels(search string) (int, error) {
 // Novel
 func (repo *NovelRepository) IsStoryExist(url string) (bool, model.Novel, error) {
 	rows := model.Novel{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.Novel{}).Where("crawler_href = ?", url).Limit(1).Take(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.Novel{}).Select("*").Where("crawler_href = ?", url).Limit(1).Take(&rows)
 	if resp.RowsAffected < 1 {
 		return false, rows, resp.Error
 	}

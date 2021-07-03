@@ -52,7 +52,7 @@ func (repo *NovelQueueRepository) MakeQueueComplete(id string) (interface{}, err
 
 func (repo *NovelQueueRepository) GetAllUrlInQueue() ([]model.NovelQueue, error) {
 	rows := []model.NovelQueue{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Order("date").Find(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.NovelQueue{}).Order("id").Find(&rows)
 	if resp.Error != nil {
 		log.Error("NovelQueueRepository ", "GetAllUrlInQueue", resp.Error)
 		return []model.NovelQueue{}, resp.Error
@@ -112,7 +112,7 @@ func (repo *NovelQueueRepository) IsQueueExist(url string) (bool, error) {
 
 func (repo *NovelQueueRepository) IsMakeCompleted(url string) (bool, error) {
 	rows := []map[string]interface{}{}
-	resp := IMySql.MySqlConnector.GetConn().Where("url = ? And is_delete = 1", url).Table("crawl_queue").Find(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Where("url = ? And is_delete = 1", url).Select("is_delete").Table("crawl_queue").Find(&rows)
 	if resp.Error != nil {
 		return false, resp.Error
 	}

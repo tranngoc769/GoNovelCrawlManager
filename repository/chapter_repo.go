@@ -18,6 +18,7 @@ func NewChapterRepository() ChapterRepository {
 var ChapterRepo ChapterRepository
 
 func (repo *ChapterRepository) CreateChapter(entry model.Chapter) (interface{}, error) {
+	log.Info("Story "+entry.StorySlug, entry.Slug, entry.Title)
 	err := IMySql.MySqlConnector.GetConn().Model(&model.Chapter{}).Create(&entry).Error
 	if err != nil {
 		log.Error("Chapter Repository ", "CreateChapter", err)
@@ -61,7 +62,7 @@ func (repo *ChapterRepository) CountChapters(search string) (int, error) {
 // Chapter
 func (repo *ChapterRepository) IsChapterExist(slug string, chapter_id int) (bool, model.Chapter, error) {
 	rows := model.Chapter{}
-	resp := IMySql.MySqlConnector.GetConn().Model(&model.Chapter{}).Where("slug = ? and chapter = ?", slug, chapter_id).Limit(1).Take(&rows)
+	resp := IMySql.MySqlConnector.GetConn().Model(&model.Chapter{}).Where("slug = ? and chapter = ?", slug, chapter_id).Select("id").Limit(1).Take(&rows)
 	if resp.RowsAffected < 1 {
 		return false, rows, nil
 	}

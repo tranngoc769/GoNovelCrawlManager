@@ -53,7 +53,6 @@ func (service *NovelService) CreateStoryCategory(storyId string, cate string) (b
 func (service *NovelService) GetStoryChapter(storyId string) ([]map[string]interface{}, error) {
 	return repository.NovelRepo.GetStoryChapter(storyId)
 }
-
 func (repo *NovelQueueService) GetOtherName() ([]map[string]interface{}, error) {
 	return repository.NovelQueueRepo.GetOtherName()
 }
