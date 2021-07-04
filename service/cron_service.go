@@ -122,6 +122,11 @@ type Info struct {
 	Date     string `json:"date"`
 }
 
+func removeEmoji(in string) string {
+	var emojiRx = regexp.MustCompile(`[^\x00-\x7F]`)
+	var s = emojiRx.ReplaceAllString(in, "")
+	return s
+}
 func GetMetaInfo(doc *goquery.Document) (string, string, string) {
 	description := ""
 	title := ""
@@ -355,7 +360,8 @@ func CrawlStory(novel model.NovelQueue) (bool, model.Novel, []string, error) {
 		}
 	}
 	infoList = nil
-	isExist, novel_exist, _ := Novel_Service.repo.IsStoryExist(novel.Url)
+	novel_slug := GetSlugFromURL(novel.Url)
+	isExist, novel_exist, _ := Novel_Service.repo.IsStoryExist(novel.Url, novel_slug)
 	if isExist {
 		switch source := novel.Source; source {
 		case WUXIA:
@@ -448,6 +454,7 @@ func CrawlStory(novel model.NovelQueue) (bool, model.Novel, []string, error) {
 		novelData.AuthorSlug = author_slug
 		novelData.IsStatus = 1
 		novelData.AccountId = 1
+		novelData.IsRobot = 1
 		novelData.Url = novel.Url
 		novelData.MetaDescription = metaDes
 		novelData.MetaKeyword = metaKeys
@@ -595,6 +602,7 @@ func CrawlByList(urlList []string, novel model.Novel, source string, onGoing boo
 			chapterDate.Chapter = uint(id)
 			chapterDate.StoryId = novel.ID
 			chapterDate.StorySlug = novel.Slug
+			chapterDate.Content = removeEmoji(chapterDate.Content)
 			_, err = Chapter_Service.repo.CreateChapter(chapterDate)
 			if err != nil {
 				log.Error("CrawlByPageRev", "CreateChapter - ", err)
@@ -645,6 +653,7 @@ func CrawlByPageRev(page int, novel model.Novel, source string, onGoing bool, qu
 			chapterDate.Chapter = uint(id)
 			chapterDate.StoryId = novel.ID
 			chapterDate.StorySlug = novel.Slug
+			chapterDate.Content = removeEmoji(chapterDate.Content)
 			_, err = Chapter_Service.repo.CreateChapter(chapterDate)
 			if err != nil {
 				log.Error("CrawlByPageRev", "CreateChapter - ", err)
@@ -720,6 +729,7 @@ func (service *CronService) RunCron() (int, interface{}) {
 						chapterDate.Chapter = uint(id)
 						chapterDate.StoryId = story.ID
 						chapterDate.StorySlug = story.Slug
+						chapterDate.Content = removeEmoji(chapterDate.Content)
 						_, err = Chapter_Service.repo.CreateChapter(chapterDate)
 						if err != nil {
 							log.Error("CrawlByPageRev", "CreateChapter - ", err)
@@ -755,6 +765,7 @@ func (service *CronService) RunCron() (int, interface{}) {
 						chapterDate.Chapter = uint(id)
 						chapterDate.StoryId = story.ID
 						chapterDate.StorySlug = story.Slug
+						chapterDate.Content = removeEmoji(chapterDate.Content)
 						_, err = Chapter_Service.repo.CreateChapter(chapterDate)
 						if err != nil {
 							log.Error("CrawlByPageRev", "CreateChapter - ", err)
@@ -773,4 +784,22 @@ func (service *CronService) RunCron() (int, interface{}) {
 		log.Error("CronService ", "RunCron", err)
 	}
 	return 0, nil
+}
+
+func (service *CronService) TEST() {
+	url := "https://novelfull.com/im-really-a-superstar/chapter-403-beating-up-three-people-consecutively.html"
+	slug := GetSlugFromURL(url)
+	id := GetChapterIdFromSlug(slug)
+	src := "novelfull.com"
+	chapterDate, err := CrawlChapter(src, url)
+	if err != nil {
+		log.Info("CrawlByPageRev", "IsChapterExist - ", err)
+	}
+
+	chapterDate.Slug = slug
+	chapterDate.Chapter = uint(id)
+	chapterDate.StoryId = 1
+	chapterDate.StorySlug = "test"
+	// chapterDate.Content = removeEmoji(chapterDate.Content)
+	_, _ = Chapter_Service.repo.CreateChapter(chapterDate)
 }
