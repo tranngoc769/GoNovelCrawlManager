@@ -333,11 +333,13 @@ func CrawlStory(novel model.NovelQueue) (bool, model.Novel, []string, error) {
 	response, err := HttpClient.GetRequestWithRetries(novel.Url)
 	if err != nil {
 		log.Error("Crawl Page", "GetRequestWithRetries - ", err)
+		return false, model.Novel{}, urlList, err
 	}
 	defer response.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
 		log.Error("Crawl Page", "NewDocumentFromReader - ", err)
+		return false, model.Novel{}, urlList, err
 	}
 	var infoList []string
 	switch source := novel.Source; source {
@@ -454,7 +456,6 @@ func CrawlStory(novel model.NovelQueue) (bool, model.Novel, []string, error) {
 		novelData.AuthorSlug = author_slug
 		novelData.IsStatus = 1
 		novelData.AccountId = 1
-		novelData.IsRobot = 1
 		novelData.Url = novel.Url
 		novelData.MetaDescription = metaDes
 		novelData.MetaKeyword = metaKeys
